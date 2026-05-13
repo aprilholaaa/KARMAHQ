@@ -1,0 +1,28 @@
+{
+  "name": "karmahq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aprilholaaa/KARMAHQ.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aprilholaaa/KARMAHQ/issues"
+  },
+  "homepage": "https://github.com/aprilholaaa/KARMAHQ#readme",
+  "dependencies": {
+    "axios": "^1.16.0",
+    "cheerio": "^1.2.0",
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2",
+    "googleapis": "^171.4.0"
+  }
+}
