@@ -652,6 +652,7 @@ Please wait while the moderation team reviews your account.`,
     console.error(
       'MESSAGE VERIFY ERROR'
     );
+    console.log(error);
 
     console.error(
       error.response?.data ||
