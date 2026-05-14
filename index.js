@@ -229,13 +229,14 @@ client.on('messageCreate', async message => {
     }
 
     const response = await axios.get(
-      `https://www.reddit.com/user/${username}/about.json`,
-      {
-        headers: {
-          'User-Agent': 'KARMAHQ Bot'
-        }
-      }
-    );
+  `https://www.reddit.com/user/${username}/about.json`,
+  {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0 Safari/537.36'
+    }
+  }
+);
 
     const data = response.data.data;
 
