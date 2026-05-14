@@ -5,53 +5,53 @@ const {
   GatewayIntentBits,
   REST,
   Routes,
-  SlashCommandBuilder,
+  SlashCommandBuilder
 } = require('discord.js');
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds],
+  intents: [GatewayIntentBits.Guilds]
 });
 
 const commands = [
   new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Replies with Pong!'),
-
-  new SlashCommandBuilder()
-    .setName('gettask')
-    .setDescription('Get a task'),
-].map(command => command.toJSON());
+    .setDescription('Ping test')
+    .toJSON()
+];
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 (async () => {
   try {
-    console.log('Registering slash commands...');
+    console.log('Registering commands...');
 
     await rest.put(
       Routes.applicationCommands(process.env.CLIENT_ID),
       { body: commands }
     );
 
-    console.log('Slash commands registered.');
+    console.log('Commands registered.');
   } catch (error) {
     console.error(error);
   }
 })();
 
-client.once('clientReady', () => {
-  console.log(`KARMAHQ ONLINE: ${client.user.tag}`);
+client.on('ready', () => {
+  console.log(`BOT READY: ${client.user.tag}`);
 });
 
 client.on('interactionCreate', async interaction => {
+  console.log('INTERACTION RECEIVED');
+
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === 'ping') {
-    await interaction.reply('KarmaHQ Pong!');
-  }
+    console.log('PING COMMAND USED');
 
-  if (interaction.commandName === 'gettask') {
-    await interaction.reply('No tasks available.');
+    await interaction.reply({
+      content: 'KARMAHQ ACTIVE',
+      ephemeral: false
+    });
   }
 });
 
