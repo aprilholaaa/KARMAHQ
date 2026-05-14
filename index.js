@@ -318,15 +318,20 @@ client.on('messageCreate', async message => {
 
     let verificationResult = 'FAIL';
 
-    if (
-      karmaLevel === 'MODERATE' ||
-      karmaLevel === 'HIGH' ||
-      karmaLevel === 'VERY HIGH'
-    ) {
+   if (
+  (
+    karmaLevel === 'MODERATE' ||
+    karmaLevel === 'HIGH' ||
+    karmaLevel === 'VERY HIGH'
+  ) &&
+  (
+    years > 0 ||
+    months >= 2
+  )
+) {
 
-      verificationResult = 'PASS';
-    }
-
+  verificationResult = 'PASS';
+}
     // WRITE TO SHEET
     await sheets.spreadsheets.values.append({
 
