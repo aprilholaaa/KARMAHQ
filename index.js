@@ -393,10 +393,37 @@ client.on('messageCreate', async message => {
       !content.includes('reddit.com/user/')
     ) return;
 
-    await message.channel.send(
-      '🔍 Verifying Reddit account...'
-    );
+    await message.channel.send({
 
+  content:
+
+`KARMAHQ REPORT
+
+Username: ${username}
+
+Post Karma: ${postKarma}
+Comment Karma: ${commentKarma}
+Total Karma: ${totalKarma}
+
+Karma Level: ${karmaLevel}
+
+Account Age: ${ageText}
+
+18+: ${nsfwStatus}
+
+Status: LIVE
+
+Verification: PENDING REVIEW
+
+⏳ Verification Pending Review
+
+Your Reddit account statistics have been submitted successfully.
+
+Please wait while the moderation team reviews your account.`,
+
+  components: [buttons]
+
+});
     let username = null;
 
     if (content.includes('/u/')) {
