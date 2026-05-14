@@ -587,7 +587,7 @@ if (existingRowIndex === -1) {
   });
 }
     // PASS
-    verificationverificationCache.set(
+    verificationCache.set(
   message.author.id,
   {
     totalKarma,
