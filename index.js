@@ -93,119 +93,127 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isButton()) return;
 
     const allowedRoles = [
-      '1504584640634163331',
-      '1504584604135456929'
-    ];
+  '1504584640634163331', // Manager
+  '1504584604135456929'  // Master
+];
 
-    const memberRoles =
-      interaction.member.roles.cache;
-
-    const hasPermission =
-      allowedRoles.some(roleId =>
-        memberRoles.has(roleId)
-      );
-
-    if (!hasPermission) {
-
-      return interaction.reply({
-        content:
-          '❌ You are not allowed to use moderation controls.',
-        ephemeral: true
-      });
-    }
-
-    // APPROVE
-    if (
-      interaction.customId ===
-      'approve_verification'
-    ) {
-      const verificationData =
-  verificationCache.get(
-    interaction.user.id
+const hasPermission =
+  interaction.member.roles.cache.some(
+    role =>
+      allowedRoles.includes(role.id)
   );
 
-if (!verificationData) {
+if (!hasPermission) {
 
   return interaction.reply({
     content:
-      '❌ Verification data expired.',
+      '❌ You are not allowed to use moderation controls.',
     ephemeral: true
   });
 }
+    // APPROVE
+if (
+  interaction.customId.startsWith(
+    'approve_'
+  )
+) {
 
-const totalKarma =
-  verificationData.totalKarma;
-      const member =
-  await interaction.guild.members.fetch(
-    verificationData.userId
-  );
+  const targetUserId =
+    interaction.customId.split('_')[1];
 
-// TASKER
-await member.roles.add(
-  '1480908809739305043'
-);
-
-// >200
-if (totalKarma >= 200) {
-
-  await member.roles.add(
-    '1504544473936560239'
-  );
-}
-
-// >500
-if (totalKarma >= 500) {
-
-  await member.roles.add(
-    '1504544632732782613'
-  );
-}
-
-// >1K
-if (totalKarma >= 1000) {
-
-  await member.roles.add(
-    '1504544695370514552'
-  );
-}
-
-// >2K
-if (totalKarma >= 2000) {
-
-  await member.roles.add(
-    '1504544785610833980'
-  );
-}
-
-// >5K
-if (totalKarma >= 5000) {
-
-  await member.roles.add(
-    '1504544612726079669'
-  );
-}
-const disabledButtons =
-  new ActionRowBuilder()
-    .addComponents(
-
-      new ButtonBuilder()
-        .setCustomId('approve_verification')
-        .setLabel('Approved')
-        .setStyle(ButtonStyle.Success)
-        .setDisabled(true),
-
-      new ButtonBuilder()
-        .setCustomId('reject_verification')
-        .setLabel('Rejected')
-        .setStyle(ButtonStyle.Danger)
-        .setDisabled(true)
+  const verificationData =
+    verificationCache.get(
+      targetUserId
     );
 
-await interaction.message.edit({
-  components: [disabledButtons]
-});
+  if (!verificationData) {
 
-await interaction.reply(
+    return interaction.reply({
+      content:
+        '❌ Verification data expired.',
+      ephemeral: true
+    });
+  }
+
+  const totalKarma =
+    verificationData.totalKarma;
+
+  const member =
+    await interaction.guild.members.fetch(
+      verificationData.userId
+    );
+
+  // TASKER
+  await member.roles.add(
+    '1480908809739305043'
+  );
+
+  // >200
+  if (totalKarma >= 200) {
+
+    await member.roles.add(
+      '1504544473936560239'
+    );
+  }
+
+  // >500
+  if (totalKarma >= 500) {
+
+    await member.roles.add(
+      '1504544632732782613'
+    );
+  }
+
+  // >1K
+  if (totalKarma >= 1000) {
+
+    await member.roles.add(
+      '1504544695370514552'
+    );
+  }
+
+  // >2K
+  if (totalKarma >= 2000) {
+
+    await member.roles.add(
+      '1504544785610833980'
+    );
+  }
+
+  // >5K
+  if (totalKarma >= 5000) {
+
+    await member.roles.add(
+      '1504544612726079669'
+    );
+  }
+
+  const disabledButtons =
+    new ActionRowBuilder()
+      .addComponents(
+
+        new ButtonBuilder()
+          .setCustomId(
+            `approve_${targetUserId}`
+          )
+          .setLabel('Approved')
+          .setStyle(ButtonStyle.Success)
+          .setDisabled(true),
+
+        new ButtonBuilder()
+          .setCustomId(
+            `reject_${targetUserId}`
+          )
+          .setLabel('Rejected')
+          .setStyle(ButtonStyle.Danger)
+          .setDisabled(true)
+      );
+
+  await interaction.message.edit({
+    components: [disabledButtons]
+  });
+
+  await interaction.reply(
 
 `✅ Verification Successful
 
@@ -214,56 +222,65 @@ Your Reddit account has been verified successfully.
 Moderation team approved your verification.
 
 Thank you.`
-);
+  );
 
-      setTimeout(async () => {
+  setTimeout(async () => {
 
-        await interaction.channel.delete();
+    await interaction.channel.delete();
 
-      }, 5000);
-    }
+  }, 5000);
+}
 
-    // REJECT
-    if (
-      interaction.customId ===
-      'reject_verification'
-    ) {
-const disabledButtons =
-  new ActionRowBuilder()
-    .addComponents(
+// REJECT
+if (
+  interaction.customId.startsWith(
+    'reject_'
+  )
+) {
 
-      new ButtonBuilder()
-        .setCustomId('approve_verification')
-        .setLabel('Approved')
-        .setStyle(ButtonStyle.Success)
-        .setDisabled(true),
+  const targetUserId =
+    interaction.customId.split('_')[1];
 
-      new ButtonBuilder()
-        .setCustomId('reject_verification')
-        .setLabel('Rejected')
-        .setStyle(ButtonStyle.Danger)
-        .setDisabled(true)
-    );
+  const disabledButtons =
+    new ActionRowBuilder()
+      .addComponents(
 
-await interaction.message.edit({
-  components: [disabledButtons]
-});
-      await interaction.reply(
+        new ButtonBuilder()
+          .setCustomId(
+            `approve_${targetUserId}`
+          )
+          .setLabel('Approved')
+          .setStyle(ButtonStyle.Success)
+          .setDisabled(true),
+
+        new ButtonBuilder()
+          .setCustomId(
+            `reject_${targetUserId}`
+          )
+          .setLabel('Rejected')
+          .setStyle(ButtonStyle.Danger)
+          .setDisabled(true)
+      );
+
+  await interaction.message.edit({
+    components: [disabledButtons]
+  });
+
+  await interaction.reply(
 
 `❌ Verification Failed
 
 Moderation team rejected this verification request.
 
 This ticket will now be closed automatically.`
-      );
+  );
 
-      setTimeout(async () => {
+  setTimeout(async () => {
 
-        await interaction.channel.delete();
+    await interaction.channel.delete();
 
-      }, 5000);
-    }
-
+  }, 5000);
+}
   } catch (error) {
 
     console.error(
@@ -274,7 +291,6 @@ This ticket will now be closed automatically.`
   }
 
 });
-
 // AUTO TICKET DETECTION
 client.on('channelCreate', async channel => {
 
@@ -594,27 +610,25 @@ if (existingRowIndex === -1) {
     userId: message.author.id
   }
 );
-   verificationCache.set(
-  message.author.id,
-  {
-    totalKarma
-  }
-);
+
    const buttons =
   new ActionRowBuilder()
     .addComponents(
 
       new ButtonBuilder()
-        .setCustomId('approve_verification')
+        .setCustomId(
+          `approve_${message.author.id}`
+        )
         .setLabel('Approve')
         .setStyle(ButtonStyle.Success),
 
       new ButtonBuilder()
-        .setCustomId('reject_verification')
+        .setCustomId(
+          `reject_${message.author.id}`
+        )
         .setLabel('Reject')
         .setStyle(ButtonStyle.Danger)
     );
-
 await message.channel.send({
 
   content:
