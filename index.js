@@ -594,7 +594,7 @@ if (existingRowIndex === -1) {
     userId: message.author.id
   }
 );
-   Cache.set(
+   verificationCache.set(
   message.author.id,
   {
     totalKarma
