@@ -443,7 +443,11 @@ Thank you.`
       'MESSAGE VERIFY ERROR'
     );
 
-    console.error(error);
+    console.error(
+      error.response?.data ||
+      error.message ||
+      error
+    );
 
     await message.channel.send(
 
