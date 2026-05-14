@@ -422,7 +422,7 @@ if (!username) {
 }
 
 const response = await axios.get(
-  `https://www.reddit.com/user/${username}/about.json`,
+  `https://api.reddit.com/user/${username}/about`,
   {
     headers: {
       'User-Agent':
