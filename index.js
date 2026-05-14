@@ -137,7 +137,7 @@ const totalKarma =
   verificationData.totalKarma;
       const member =
   await interaction.guild.members.fetch(
-    interaction.user.id
+    verificationData.userId
   );
 
 // TASKER
@@ -387,67 +387,41 @@ client.on('messageCreate', async message => {
 
     const content = message.content;
 
-    // CHECK FOR REDDIT LINK
-    if (
-      !content.includes('reddit.com/u/') &&
-      !content.includes('reddit.com/user/')
-    ) return;
+   // CHECK FOR REDDIT LINK
+if (
+  !content.includes('reddit.com/u/') &&
+  !content.includes('reddit.com/user/')
+) return;
 
+await message.channel.send(
+  '🔍 Verifying Reddit account...'
+);
 
-  content:
+let username = null;
 
-`KARMAHQ REPORT
+if (content.includes('/u/')) {
 
-Username: ${username}
+  username = content
+    .split('/u/')[1]
+    ?.split('/')[0];
 
-Post Karma: ${postKarma}
-Comment Karma: ${commentKarma}
-Total Karma: ${totalKarma}
+} else if (
+  content.includes('/user/')
+) {
 
-Karma Level: ${karmaLevel}
+  username = content
+    .split('/user/')[1]
+    ?.split('/')[0];
+}
 
-Account Age: ${ageText}
+if (!username) {
 
-18+: ${nsfwStatus}
+  return message.channel.send(
+    'Invalid Reddit profile link.'
+  );
+}
 
-Status: LIVE
-
-Verification: PENDING REVIEW
-
-⏳ Verification Pending Review
-
-Your Reddit account statistics have been submitted successfully.
-
-Please wait while the moderation team reviews your account.`,
-
-  components: [buttons]
-
-});
-    let username = null;
-
-    if (content.includes('/u/')) {
-
-      username = content
-        .split('/u/')[1]
-        ?.split('/')[0];
-
-    } else if (
-      content.includes('/user/')
-    ) {
-
-      username = content
-        .split('/user/')[1]
-        ?.split('/')[0];
-    }
-
-    if (!username) {
-
-      return message.channel.send(
-        'Invalid Reddit profile link.'
-      );
-    }
-
-    const response = await axios.get(
+const response = await axios.get(
   `https://www.reddit.com/user/${username}/about.json`,
   {
     headers: {
@@ -457,88 +431,86 @@ Please wait while the moderation team reviews your account.`,
   }
 );
 
-    const data = response.data.data;
+const data = response.data.data;
 
-    const postKarma =
-      data.link_karma;
+const postKarma =
+  data.link_karma;
 
-    const commentKarma =
-      data.comment_karma;
+const commentKarma =
+  data.comment_karma;
 
-    const totalKarma =
-      postKarma + commentKarma;
+const totalKarma =
+  postKarma + commentKarma;
 
-    const nsfwStatus =
-      data.subreddit?.over_18
-        ? 'YES'
-        : 'NO';
+const nsfwStatus =
+  data.subreddit?.over_18
+    ? 'YES'
+    : 'NO';
 
-    const created = new Date(
-      data.created_utc * 1000
-    );
+const created = new Date(
+  data.created_utc * 1000
+);
 
-    const now = new Date();
+const now = new Date();
 
-    let years =
-      now.getFullYear() -
-      created.getFullYear();
+let years =
+  now.getFullYear() -
+  created.getFullYear();
 
-    let months =
-      now.getMonth() -
-      created.getMonth();
+let months =
+  now.getMonth() -
+  created.getMonth();
 
-    if (months < 0) {
+if (months < 0) {
 
-      years--;
-      months += 12;
-    }
+  years--;
+  months += 12;
+}
 
-    let ageText = '';
+let ageText = '';
 
-    if (years > 0) {
+if (years > 0) {
 
-      ageText +=
-        `${years} year${years > 1 ? 's' : ''}`;
-    }
+  ageText +=
+    `${years} year${years > 1 ? 's' : ''}`;
+}
 
-    if (months > 0) {
+if (months > 0) {
 
-      if (ageText.length > 0) {
-        ageText += ' ';
-      }
+  if (ageText.length > 0) {
+    ageText += ' ';
+  }
 
-      ageText +=
-        `${months} month${months > 1 ? 's' : ''}`;
-    }
+  ageText +=
+    `${months} month${months > 1 ? 's' : ''}`;
+}
 
-    if (ageText === '') {
+if (ageText === '') {
 
-      ageText = 'Less than 1 month';
-    }
+  ageText = 'Less than 1 month';
+}
 
-    let karmaLevel = 'LOWEST';
+let karmaLevel = 'LOWEST';
 
-    if (totalKarma > 5000) {
+if (totalKarma > 5000) {
 
-      karmaLevel = 'VERY HIGH';
+  karmaLevel = 'VERY HIGH';
 
-    } else if (totalKarma > 1000) {
+} else if (totalKarma > 1000) {
 
-      karmaLevel = 'HIGH';
+  karmaLevel = 'HIGH';
 
-    } else if (totalKarma > 200) {
+} else if (totalKarma > 200) {
 
-      karmaLevel = 'MODERATE';
+  karmaLevel = 'MODERATE';
 
-    } else if (totalKarma > 50) {
+} else if (totalKarma > 50) {
 
-      karmaLevel = 'LOW';
-    }
+  karmaLevel = 'LOW';
+}
 
-    let verificationResult = 'PENDING REVIEW';
-
-  
-    // WRITE TO SHEET
+let verificationResult = 'PENDING REVIEW';
+    
     const existingRows =
   await sheets.spreadsheets.values.get({
 
@@ -613,7 +585,14 @@ if (existingRowIndex === -1) {
   });
 }
     // PASS
-    verificationCache.set(
+    verificationverificationCache.set(
+  message.author.id,
+  {
+    totalKarma,
+    userId: message.author.id
+  }
+);
+   Cache.set(
   message.author.id,
   {
     totalKarma
@@ -634,7 +613,9 @@ if (existingRowIndex === -1) {
         .setStyle(ButtonStyle.Danger)
     );
 
-await message.channel.send(
+await message.channel.send({
+
+  content:
 
 `KARMAHQ REPORT
 
@@ -660,10 +641,9 @@ Your Reddit account statistics have been submitted successfully.
 
 Please wait while the moderation team reviews your account.`,
 
-  {
-    components: [buttons]
-  }
-);
+  components: [buttons]
+
+});
 
   } catch (error) {
 
