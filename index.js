@@ -426,7 +426,9 @@ const response = await axios.get(
   {
     headers: {
       'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0 Safari/537.36'
+        'KARMAHQBot/1.0',
+      'Accept':
+        'application/json'
     }
   }
 );
