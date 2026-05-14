@@ -6,7 +6,10 @@ const {
   REST,
   Routes,
   SlashCommandBuilder,
-  ChannelType
+  ChannelType,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle
 } = require('discord.js');
 
 const axios = require('axios');
@@ -29,6 +32,8 @@ const sheets = google.sheets({
   version: 'v4',
   auth
 });
+const verificationCache =
+  new Map();
 
 const SPREADSHEET_ID =
   '1XagI-OGeho9CXxlIakjtkR9tj0x0aURjiU953ESbv0Q';
@@ -78,6 +83,194 @@ client.on('interactionCreate', async interaction => {
   if (interaction.commandName === 'ping') {
 
     return interaction.reply('KARMAHQ ACTIVE');
+  }
+
+});
+client.on('interactionCreate', async interaction => {
+
+  try {
+
+    if (!interaction.isButton()) return;
+
+    const allowedRoles = [
+      '1504584640634163331',
+      '1504584604135456929'
+    ];
+
+    const memberRoles =
+      interaction.member.roles.cache;
+
+    const hasPermission =
+      allowedRoles.some(roleId =>
+        memberRoles.has(roleId)
+      );
+
+    if (!hasPermission) {
+
+      return interaction.reply({
+        content:
+          '❌ You are not allowed to use moderation controls.',
+        ephemeral: true
+      });
+    }
+
+    // APPROVE
+    if (
+      interaction.customId ===
+      'approve_verification'
+    ) {
+      const verificationData =
+  verificationCache.get(
+    interaction.user.id
+  );
+
+if (!verificationData) {
+
+  return interaction.reply({
+    content:
+      '❌ Verification data expired.',
+    ephemeral: true
+  });
+}
+
+const totalKarma =
+  verificationData.totalKarma;
+      const member =
+  await interaction.guild.members.fetch(
+    interaction.user.id
+  );
+
+// TASKER
+await member.roles.add(
+  '1480908809739305043'
+);
+
+// >200
+if (totalKarma >= 200) {
+
+  await member.roles.add(
+    '1504544473936560239'
+  );
+}
+
+// >500
+if (totalKarma >= 500) {
+
+  await member.roles.add(
+    '1504544632732782613'
+  );
+}
+
+// >1K
+if (totalKarma >= 1000) {
+
+  await member.roles.add(
+    '1504544695370514552'
+  );
+}
+
+// >2K
+if (totalKarma >= 2000) {
+
+  await member.roles.add(
+    '1504544785610833980'
+  );
+}
+
+// >5K
+if (totalKarma >= 5000) {
+
+  await member.roles.add(
+    '1504544612726079669'
+  );
+}
+const disabledButtons =
+  new ActionRowBuilder()
+    .addComponents(
+
+      new ButtonBuilder()
+        .setCustomId('approve_verification')
+        .setLabel('Approved')
+        .setStyle(ButtonStyle.Success)
+        .setDisabled(true),
+
+      new ButtonBuilder()
+        .setCustomId('reject_verification')
+        .setLabel('Rejected')
+        .setStyle(ButtonStyle.Danger)
+        .setDisabled(true)
+    );
+
+await interaction.message.edit({
+  components: [disabledButtons]
+});
+
+await interaction.reply(
+
+`✅ Verification Successful
+
+Your Reddit account has been verified successfully.
+
+Moderation team approved your verification.
+
+Thank you.`
+);
+
+      setTimeout(async () => {
+
+        await interaction.channel.delete();
+
+      }, 5000);
+    }
+
+    // REJECT
+    if (
+      interaction.customId ===
+      'reject_verification'
+    ) {
+const disabledButtons =
+  new ActionRowBuilder()
+    .addComponents(
+
+      new ButtonBuilder()
+        .setCustomId('approve_verification')
+        .setLabel('Approved')
+        .setStyle(ButtonStyle.Success)
+        .setDisabled(true),
+
+      new ButtonBuilder()
+        .setCustomId('reject_verification')
+        .setLabel('Rejected')
+        .setStyle(ButtonStyle.Danger)
+        .setDisabled(true)
+    );
+
+await interaction.message.edit({
+  components: [disabledButtons]
+});
+      await interaction.reply(
+
+`❌ Verification Failed
+
+Moderation team rejected this verification request.
+
+This ticket will now be closed automatically.`
+      );
+
+      setTimeout(async () => {
+
+        await interaction.channel.delete();
+
+      }, 5000);
+    }
+
+  } catch (error) {
+
+    console.error(
+      'BUTTON INTERACTION ERROR'
+    );
+
+    console.error(error);
   }
 
 });
@@ -316,94 +509,106 @@ client.on('messageCreate', async message => {
       karmaLevel = 'LOW';
     }
 
-    let verificationResult = 'FAIL';
+    let verificationResult = 'PENDING REVIEW';
 
-   if (
-  (
-    karmaLevel === 'MODERATE' ||
-    karmaLevel === 'HIGH' ||
-    karmaLevel === 'VERY HIGH'
-  ) &&
-  (
-    years > 0 ||
-    months >= 2
-  )
-) {
-
-  verificationResult = 'PASS';
-}
+  
     // WRITE TO SHEET
-    await sheets.spreadsheets.values.append({
+    const existingRows =
+  await sheets.spreadsheets.values.get({
 
-      spreadsheetId: SPREADSHEET_ID,
+    spreadsheetId: SPREADSHEET_ID,
 
-      range: 'Sheet1!A:M',
+    range: 'Sheet1!A:AZ'
+  });
 
-      valueInputOption: 'USER_ENTERED',
+const rows =
+  existingRows.data.values || [];
 
-      requestBody: {
+let existingRowIndex = -1;
 
-        values: [[
-          '',
-          message.author.username,
-          message.author.id,
-          content,
-          username,
-          postKarma,
-          commentKarma,
-          totalKarma,
-          karmaLevel,
-          ageText,
-          nsfwStatus,
-          'ACTIVE',
-          verificationResult
-        ]]
-      }
-    });
+for (let i = 1; i < rows.length; i++) {
 
+  const row = rows[i];
+
+  // DISCORD ID COLUMN = D
+  if (row[3] === message.author.id) {
+
+    existingRowIndex = i + 1;
+    break;
+  }
+}
+
+const rowData = [
+  '',
+  message.author.username,
+  message.member?.displayName || '',
+  message.author.id,
+  content,
+  username,
+  postKarma,
+  commentKarma,
+  totalKarma,
+  karmaLevel,
+  ageText,
+  nsfwStatus,
+  'LIVE',
+  verificationResult,
+  ''
+];
+
+if (existingRowIndex === -1) {
+
+  await sheets.spreadsheets.values.append({
+
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: 'Sheet1!A:O',
+
+    valueInputOption: 'USER_ENTERED',
+
+    requestBody: {
+      values: [rowData]
+    }
+  });
+
+} else {
+
+  await sheets.spreadsheets.values.update({
+
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: `Sheet1!A${existingRowIndex}:O${existingRowIndex}`,
+
+    valueInputOption: 'USER_ENTERED',
+
+    requestBody: {
+      values: [rowData]
+    }
+  });
+}
     // PASS
-    if (
-      verificationResult === 'PASS'
-    ) {
+    verificationCache.set(
+  message.author.id,
+  {
+    totalKarma
+  }
+);
+   const buttons =
+  new ActionRowBuilder()
+    .addComponents(
 
-      await message.channel.send(
+      new ButtonBuilder()
+        .setCustomId('approve_verification')
+        .setLabel('Approve')
+        .setStyle(ButtonStyle.Success),
 
-`KARMAHQ REPORT
+      new ButtonBuilder()
+        .setCustomId('reject_verification')
+        .setLabel('Reject')
+        .setStyle(ButtonStyle.Danger)
+    );
 
-Username: ${username}
-
-Post Karma: ${postKarma}
-Comment Karma: ${commentKarma}
-Total Karma: ${totalKarma}
-
-Karma Level: ${karmaLevel}
-
-Account Age: ${ageText}
-
-NSFW: ${nsfwStatus}
-
-Status: ACTIVE
-
-Verification: PASS
-
-✅ Verification Successful
-
-Your Reddit account has been verified successfully.
-
-You meet our current requirements.
-
-Our team will assign tasks to you soon.
-
-Thank you.`
-
-      );
-
-    }
-
-    // FAIL
-    else {
-
-      await message.channel.send(
+await message.channel.send(
 
 `KARMAHQ REPORT
 
@@ -417,31 +622,22 @@ Karma Level: ${karmaLevel}
 
 Account Age: ${ageText}
 
-NSFW: ${nsfwStatus}
+18+: ${nsfwStatus}
 
-Status: ACTIVE
+Status: LIVE
 
-Verification: FAIL
+Verification: PENDING REVIEW
 
-❌ Verification Failed
+⏳ Verification Pending Review
 
-Your Reddit account does not meet our minimum requirements.
+Your Reddit account statistics have been submitted successfully.
 
-Reason:
-Low / Lowest Karma Account
+Please wait while the moderation team reviews your account.`,
 
-This ticket will now be closed automatically.
-
-Thank you.`
-
-      );
-
-      setTimeout(async () => {
-
-        await message.channel.delete();
-
-      }, 5000);
-    }
+  {
+    components: [buttons]
+  }
+);
 
   } catch (error) {
 
