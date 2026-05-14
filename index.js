@@ -393,7 +393,6 @@ client.on('messageCreate', async message => {
       !content.includes('reddit.com/user/')
     ) return;
 
-    await message.channel.send({
 
   content:
 
