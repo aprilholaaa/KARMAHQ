@@ -661,27 +661,34 @@ Please wait while the moderation team reviews your account.`,
 
   } catch (error) {
 
-    console.error(
-      'MESSAGE VERIFY ERROR'
-    );
-    console.log(error);
+  console.error(
+    'MESSAGE VERIFY ERROR'
+  );
 
-    console.error(
-      error.response?.data ||
-      error.message ||
-      error
-    );
+  console.log(
+    'STATUS:',
+    error.response?.status
+  );
 
-    await message.channel.send(
+  console.log(
+    'DATA:',
+    error.response?.data
+  );
+
+  console.log(
+    'MESSAGE:',
+    error.message
+  );
+
+  await message.channel.send(
 
 `Failed to fetch Reddit account.
 
 Account may be suspended,
 deleted, or invalid.`
 
-    );
-  }
-
+  );
+}
 });
 
 client.login(process.env.DISCORD_TOKEN);
