@@ -520,112 +520,18 @@ if (!username) {
   );
 }
 
-const response = await axios.get(
-  `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
-  {
-    headers: {
-      'User-Agent':
-        'KARMAHQBot/1.0 by aprilholaaa'
-    },
+const postKarma = 'MANUAL';
+const commentKarma = 'MANUAL';
+const totalKarma = 'MANUAL';
 
-    timeout: 10000,
+const nsfwStatus = 'MANUAL';
 
-    validateStatus: () => true
-  }
-);
+const ageText = 'MANUAL';
 
-if (response.status !== 200) {
+const karmaLevel = 'MANUAL';
 
-  console.log(
-    'REDDIT STATUS:',
-    response.status
-  );
-
- throw new Error(
-  `Reddit returned ${response.status}`
-);
-
-}
-
-const data = response.data.data;
-
-const postKarma =
-  data.link_karma;
-
-const commentKarma =
-  data.comment_karma;
-
-const totalKarma =
-  postKarma + commentKarma;
-
-const nsfwStatus =
-  data.subreddit?.over_18
-    ? 'YES'
-    : 'NO';
-
-const created = new Date(
-  data.created_utc * 1000
-);
-
-const now = new Date();
-
-let years =
-  now.getFullYear() -
-  created.getFullYear();
-
-let months =
-  now.getMonth() -
-  created.getMonth();
-
-if (months < 0) {
-
-  years--;
-  months += 12;
-}
-
-let ageText = '';
-
-if (years > 0) {
-
-  ageText +=
-    `${years} year${years > 1 ? 's' : ''}`;
-}
-
-if (months > 0) {
-
-  if (ageText.length > 0) {
-    ageText += ' ';
-  }
-
-  ageText +=
-    `${months} month${months > 1 ? 's' : ''}`;
-}
-
-if (ageText === '') {
-
-  ageText = 'Less than 1 month';
-}
-
-let karmaLevel = 'LOWEST';
-
-if (totalKarma > 5000) {
-
-  karmaLevel = 'VERY HIGH';
-
-} else if (totalKarma > 1000) {
-
-  karmaLevel = 'HIGH';
-
-} else if (totalKarma > 200) {
-
-  karmaLevel = 'MODERATE';
-
-} else if (totalKarma > 50) {
-
-  karmaLevel = 'LOW';
-}
-
-let verificationResult = 'PENDING REVIEW';
+let verificationResult =
+  'PENDING REVIEW';
     
     const existingRows =
   await sheets.spreadsheets.values.get({
