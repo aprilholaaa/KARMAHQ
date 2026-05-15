@@ -143,7 +143,7 @@ if (
 
 if (
   member.roles.cache.has(
-    '1504731672476909578'
+    '1504852274567053353'
   )
 ) {
 
@@ -262,13 +262,14 @@ if (existingRowIndex !== -1) {
 
 await interaction.reply(
 
-`✅ Verification Successful
+ `✅ Verification Successful
 
-Your Reddit account has been verified successfully.
+<@${targetUserId}> you are successfully verified.
 
-Moderation team approved your verification.
+Your Reddit account has been approved by the moderation team.
 
 Thank you.`
+
 );
 
   setTimeout(async () => {
@@ -692,7 +693,7 @@ Karma Level: ${karmaLevel}
 
 Account Age: ${ageText}
 
-18+: -
+18+: ${data.over_18 ? 'YES' : 'NO'}
 
 Status: LIVE
 
