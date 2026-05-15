@@ -92,10 +92,6 @@ client.on('interactionCreate', async interaction => {
 
     if (!interaction.isButton()) return;
 
-    const allowedRoles = [
-  '1504584640634163331', // Manager
-  '1504584604135456929'  // Master
-];
 
 const hasPermission =
   interaction.member.roles.cache.some(
@@ -517,16 +513,55 @@ if (!username) {
   );
 }
 
-const postKarma = '-';
-const commentKarma = '-';
-const totalKarma = 0;
+const response = await axios.get(
+  `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
+  {
+    headers: {
+      'User-Agent':
+        'discord:karmahq:v1.0 (by /u/spez)'
+    },
 
-const nsfwStatus = '-';
+    timeout: 10000
+  }
+);
 
-const ageText = '-';
+const data = response.data.data;
 
-const karmaLevel = 'PENDING';
+const postKarma =
+  data.link_karma || 0;
 
+const commentKarma =
+  data.comment_karma || 0;
+
+const totalKarma =
+  postKarma + commentKarma;
+
+const createdDate =
+  new Date(data.created_utc * 1000);
+
+const now = new Date();
+
+const diffYears =
+  now.getFullYear() -
+  createdDate.getFullYear();
+
+const ageText =
+  `${diffYears} years`;
+
+let karmaLevel = 'LOW';
+
+if (totalKarma >= 1000) {
+
+  karmaLevel = 'VERY HIGH';
+
+} else if (totalKarma >= 500) {
+
+  karmaLevel = 'HIGH';
+
+} else if (totalKarma >= 200) {
+
+  karmaLevel = 'MEDIUM';
+}
 let verificationResult =
   'PENDING REVIEW';
     
@@ -567,7 +602,7 @@ const rowData = [
   totalKarma,
   karmaLevel,
   ageText,
-  nsfwStatus,
+  '-',
   'LIVE',
   verificationResult,
   ''
@@ -640,23 +675,29 @@ await message.channel.send({
 
 Username: ${username}
 
-Reddit Profile:
-${content}
+Post Karma: ${postKarma}
+Comment Karma: ${commentKarma}
+Total Karma: ${totalKarma}
+
+Karma Level: ${karmaLevel}
+
+Account Age: ${ageText}
+
+18+: -
 
 Status: LIVE
 
-Verification: PENDING REVIEW
+Verification: ${verificationResult}
 
-⚠️ Automatic Reddit statistics are temporarily unavailable.
+⏳ Verification Pending Review
 
-Moderation team will manually review this Reddit account.
+Your Reddit account statistics have been submitted successfully.
 
-Please wait for approval.`,
+Please wait while the moderation team reviews your account.`,
 
   components: [buttons]
 
 });
-
   } catch (error) {
 
   console.error(
