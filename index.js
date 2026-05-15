@@ -145,9 +145,6 @@ if (
 
   // TASKER
 
-  await member.roles.remove(
-  '1504731672476909578'
-);
 
   await member.roles.add(
     '1480908809739305043'
@@ -520,15 +517,15 @@ if (!username) {
   );
 }
 
-const postKarma = 'MANUAL';
-const commentKarma = 'MANUAL';
-const totalKarma = 'MANUAL';
+const postKarma = '-';
+const commentKarma = '-';
+const totalKarma = 0;
 
-const nsfwStatus = 'MANUAL';
+const nsfwStatus = '-';
 
-const ageText = 'MANUAL';
+const ageText = '-';
 
-const karmaLevel = 'MANUAL';
+const karmaLevel = 'PENDING';
 
 let verificationResult =
   'PENDING REVIEW';
@@ -641,25 +638,18 @@ await message.channel.send({
 
 Username: ${username}
 
-Post Karma: ${postKarma}
-Comment Karma: ${commentKarma}
-Total Karma: ${totalKarma}
-
-Karma Level: ${karmaLevel}
-
-Account Age: ${ageText}
-
-18+: ${nsfwStatus}
+Reddit Profile:
+${content}
 
 Status: LIVE
 
 Verification: PENDING REVIEW
 
-⏳ Verification Pending Review
+⚠️ Automatic Reddit statistics are temporarily unavailable.
 
-Your Reddit account statistics have been submitted successfully.
+Moderation team will manually review this Reddit account.
 
-Please wait while the moderation team reviews your account.`,
+Please wait for approval.`,
 
   components: [buttons]
 
