@@ -524,11 +524,29 @@ const response = await axios.get(
   `https://old.reddit.com/user/${username}/about.json`,
   {
     headers: {
-  'User-Agent':
-    'Mozilla/5.0'
-}
+      'User-Agent':
+        'Mozilla/5.0'
+    },
+
+    timeout: 10000,
+
+    validateStatus: () => true
   }
 );
+
+if (response.status !== 200) {
+
+  console.log(
+    'REDDIT STATUS:',
+    response.status
+  );
+
+  throw new Error(
+    `Reddit returned ${response.status}`
+  
+);
+
+}
 
 const data = response.data.data;
 
