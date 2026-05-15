@@ -100,7 +100,7 @@ client.on('interactionCreate', async interaction => {
 const hasPermission =
   interaction.member.roles.cache.some(
     role =>
-      allowedRoles.includes(role.id)
+      role.name.toLowerCase().includes('master')
   );
 
 if (!hasPermission) {
