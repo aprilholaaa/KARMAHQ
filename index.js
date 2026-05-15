@@ -141,14 +141,20 @@ if (
 
   // TASKER
 
-await member.roles.remove(
-  '1504731672476909578'
-);
+if (
+  member.roles.cache.has(
+    '1504731672476909578'
+  )
+) {
+
+  await member.roles.remove(
+    '1504731672476909578'
+  );
+}
 
 await member.roles.add(
   '1480908809739305043'
 );
-
   // >200
   if (totalKarma >= 200) {
 
