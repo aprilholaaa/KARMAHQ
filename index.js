@@ -213,7 +213,47 @@ if (
     components: [disabledButtons]
   });
 
-  await interaction.reply(
+  const existingRows =
+  await sheets.spreadsheets.values.get({
+
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: 'Sheet1!A:AZ'
+  });
+
+const rows =
+  existingRows.data.values || [];
+
+let existingRowIndex = -1;
+
+for (let i = 1; i < rows.length; i++) {
+
+  const row = rows[i];
+
+  if (row[3] === targetUserId) {
+
+    existingRowIndex = i + 1;
+    break;
+  }
+}
+
+if (existingRowIndex !== -1) {
+
+  await sheets.spreadsheets.values.update({
+
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: `Sheet1!N${existingRowIndex}`,
+
+    valueInputOption: 'USER_ENTERED',
+
+    requestBody: {
+      values: [['APPROVED']]
+    }
+  });
+}
+
+await interaction.reply(
 
 `✅ Verification Successful
 
@@ -222,7 +262,7 @@ Your Reddit account has been verified successfully.
 Moderation team approved your verification.
 
 Thank you.`
-  );
+);
 
   setTimeout(async () => {
 
@@ -265,7 +305,45 @@ if (
   await interaction.message.edit({
     components: [disabledButtons]
   });
+  const existingRows =
+  await sheets.spreadsheets.values.get({
 
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: 'Sheet1!A:AZ'
+  });
+
+const rows =
+  existingRows.data.values || [];
+
+let existingRowIndex = -1;
+
+for (let i = 1; i < rows.length; i++) {
+
+  const row = rows[i];
+
+  if (row[3] === targetUserId) {
+
+    existingRowIndex = i + 1;
+    break;
+  }
+}
+
+if (existingRowIndex !== -1) {
+
+  await sheets.spreadsheets.values.update({
+
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: `Sheet1!N${existingRowIndex}`,
+
+    valueInputOption: 'USER_ENTERED',
+
+    requestBody: {
+      values: [['REJECTED']]
+    }
+  });
+}
   await interaction.reply(
 
 `❌ Verification Failed
