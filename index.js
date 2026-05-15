@@ -144,6 +144,11 @@ if (
     );
 
   // TASKER
+
+  await member.roles.remove(
+  '1504731672476909578'
+);
+
   await member.roles.add(
     '1480908809739305043'
   );
@@ -268,7 +273,7 @@ Thank you.`
 
     await interaction.channel.delete();
 
-  }, 5000);
+  }, 120000);
 }
 
 // REJECT
@@ -357,7 +362,7 @@ This ticket will now be closed automatically.`
 
     await interaction.channel.delete();
 
-  }, 5000);
+  }, 120000);
 }
   } catch (error) {
 
@@ -439,7 +444,7 @@ This ticket will now be closed automatically.`
 
               await channel.delete();
 
-            }, 5000);
+            }, 120000);
           }
 
         } catch (error) {
