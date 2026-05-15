@@ -782,12 +782,14 @@ Please wait while the moderation team reviews your account.`,
 
   await message.channel.send(
 
-`Failed to fetch Reddit account.
+`⚠️ Reddit verification failed.
 
-Account may be suspended,
-deleted, or invalid.`
+Reddit temporarily blocked automated verification requests.
 
-  );
+Please wait for moderator manual review.`
+
+);
+
 }
 });
 
