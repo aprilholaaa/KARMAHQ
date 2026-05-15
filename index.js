@@ -573,6 +573,8 @@ const rowData = [
   ''
 ];
 
+console.log('SHEET WRITE START');
+
 if (existingRowIndex === -1) {
 
   await sheets.spreadsheets.values.append({
