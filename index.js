@@ -521,11 +521,11 @@ if (!username) {
 }
 
 const response = await axios.get(
-  `https://old.reddit.com/user/${username}/about.json`,
+  `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
   {
     headers: {
       'User-Agent':
-        'Mozilla/5.0'
+        'KARMAHQBot/1.0 by aprilholaaa'
     },
 
     timeout: 10000,
@@ -541,9 +541,8 @@ if (response.status !== 200) {
     response.status
   );
 
-  throw new Error(
-    `Reddit returned ${response.status}`
-  
+ throw new Error(
+  `Reddit returned ${response.status}`
 );
 
 }
