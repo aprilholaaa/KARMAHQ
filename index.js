@@ -438,13 +438,11 @@ if (!username) {
 }
 
 const response = await axios.get(
-  `https://api.reddit.com/user/${username}/about`,
+  `https://www.reddit.com/user/${username}/about.json`,
   {
     headers: {
       'User-Agent':
-        'KARMAHQBot/1.0',
-      'Accept':
-        'application/json'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0 Safari/537.36'
     }
   }
 );
