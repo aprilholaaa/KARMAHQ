@@ -148,8 +148,10 @@ if (
 ) {
 
   await member.roles.remove(
-    '1505072480082198558'
-  );
+  '1505072480082198558'
+);
+
+await member.fetch(true);
 }
 
 await member.roles.add(
@@ -237,7 +239,10 @@ for (let i = 1; i < rows.length; i++) {
 
   const row = rows[i];
 
-  if (row[3] === targetUserId) {
+  if (
+  String(row[3]).trim() ===
+  String(targetUserId).trim()
+) {
 
     existingRowIndex = i + 1;
     break;
@@ -330,7 +335,10 @@ for (let i = 1; i < rows.length; i++) {
 
   const row = rows[i];
 
-  if (row[3] === targetUserId) {
+  if (
+  String(row[3]).trim() ===
+  String(targetUserId).trim()
+) {
 
     existingRowIndex = i + 1;
     break;
@@ -593,7 +601,10 @@ for (let i = 1; i < rows.length; i++) {
   const row = rows[i];
 
   // DISCORD ID COLUMN = D
-  if (row[3] === message.author.id) {
+  if (
+  String(row[3]).trim() ===
+  String(message.author.id).trim()
+) {
 
     existingRowIndex = i + 1;
     break;
@@ -612,7 +623,7 @@ const rowData = [
   totalKarma,
   karmaLevel,
   ageText,
-  '-',
+  data.over_18 ? 'YES' : 'NO',
   'LIVE',
   verificationResult,
   ''
