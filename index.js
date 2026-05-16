@@ -743,3 +743,5 @@ Please wait for moderator manual review.`
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+// redeploy trigger
