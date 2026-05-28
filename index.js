@@ -13,6 +13,8 @@ const {
 } = require('discord.js');
 
 const axios = require('axios');
+const { HttpsProxyAgent } =
+  require('https-proxy-agent');
 const { google } = require('googleapis');
 
 const client = new Client({
@@ -531,6 +533,10 @@ if (!username) {
   );
 }
 
+const proxyAgent =
+  new HttpsProxyAgent(
+'http://mwduomod-gb-1:fwyzeoiv8r0h@p.webshare.io:80'  );
+
 const response = await axios.get(
   `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
   {
@@ -538,6 +544,10 @@ const response = await axios.get(
       'User-Agent':
         'discord:karmahq:v1.0 (by /u/spez)'
     },
+
+    httpsAgent: proxyAgent,
+
+    proxy: false,
 
     timeout: 10000
   }

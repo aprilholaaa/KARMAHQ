@@ -24,6 +24,7 @@
     "discord.js": "^14.26.4",
     "dotenv": "^17.4.2",
     "googleapis": "^171.4.0",
+    "https-proxy-agent": "^9.0.0",
     "snoowrap": "^1.23.0"
   }
 }
