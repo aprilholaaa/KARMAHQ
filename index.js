@@ -594,19 +594,13 @@ const data = redditBlocked
   : response.data.data;
 
 const postKarma =
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : data.link_karma || 0;
+  data.link_karma || 0;
 
 const commentKarma =
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : data.comment_karma || 0;
+  data.comment_karma || 0;
 
 const totalKarma =
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : postKarma + commentKarma;
+  postKarma + commentKarma;
 
 const createdDate =
   new Date(data.created_utc * 1000);
@@ -750,9 +744,23 @@ await message.channel.send({
 
 Username: ${username}
 
-Post Karma: ${postKarma}
-Comment Karma: ${commentKarma}
-Total Karma: ${totalKarma}
+Post Karma: ${
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : postKarma
+}
+
+Comment Karma: ${
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : commentKarma
+}
+
+Total Karma: ${
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : totalKarma
+}
 
 Karma Level: ${karmaLevel}
 
