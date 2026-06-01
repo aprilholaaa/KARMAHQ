@@ -539,6 +539,10 @@ if (!username) {
   );
 }
 
+if (!username.trim()) {
+  return;
+}
+
 const proxyAgent =
   new HttpsProxyAgent(
     'http://mwduomod-GB-1:fwyzeoiv2k9a@p.webshare.io:80'
@@ -579,8 +583,8 @@ console.log(
 );
 
 console.log(
-  'RESPONSE DATA:',
-  response.data
+  'RESPONSE DATA TYPE:',
+  typeof response.data
 );
 if (
   response.status !== 200 ||
