@@ -273,36 +273,6 @@ Your Reddit account has been approved by the moderation team.
 Thank you.`
 
 );
-
- setTimeout(async () => {
-
-  try {
-
-    const member =
-      await channel.guild.members.fetch(
-        user.id
-      );
-
-    await member.kick(
-      'Verification timeout'
-    );
-
-    console.log(
-      `AUTO KICKED: ${member.user.tag}`
-    );
-
-  } catch (error) {
-
-    console.log(
-      'AUTO KICK FAILED'
-    );
-
-    console.error(error);
-  }
-
-  await channel.delete();
-
-}, 120000);
 }
 
 // REJECT
@@ -534,7 +504,7 @@ await channel.delete();
           console.error(error);
         }
 
-      }, 2 * 60 * 1000);
+      }, 48 * 60 * 60 * 1000 + 60000);
     }
 
   } catch (error) {
@@ -922,7 +892,7 @@ client.on(
         console.error(error);
       }
 
-    }, 2 * 60 * 1000);
+    }, 48 * 60 * 60 * 1000 + 60000);
   }
 );
 
