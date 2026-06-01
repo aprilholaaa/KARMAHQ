@@ -586,27 +586,29 @@ console.log(
   'RESPONSE DATA TYPE:',
   typeof response.data
 );
+let redditBlocked = false;
+
 if (
   response.status !== 200 ||
   !response.data?.data
 ) {
 
+  redditBlocked = true;
+
   console.log(
-  'Reddit API blocked, switching to manual review'
-);
-
-return await message.channel.send({
-
-  content:
-
-`⚠️ Reddit automatic verification is temporarily unavailable.
-
-Your verification request has been sent to moderators for manual review.`
-
-});
+    'Reddit API blocked, switching to manual review'
+  );
 }
 
-const data = response.data.data;
+const data = redditBlocked
+  ? {
+      link_karma: 0,
+      comment_karma: 0,
+      created_utc:
+        Date.now() / 1000,
+      over_18: false
+    }
+  : response.data.data;
 
 const postKarma =
   data.link_karma || 0;
