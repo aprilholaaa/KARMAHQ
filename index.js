@@ -497,7 +497,7 @@ This ticket will now be closed automatically.`
           console.error(error);
         }
 
-      }, 10 * 60 * 1000);
+      }, 2 * 60 * 1000);
     }
 
   } catch (error) {
