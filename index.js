@@ -274,11 +274,35 @@ Thank you.`
 
 );
 
-  setTimeout(async () => {
+ setTimeout(async () => {
 
-    await interaction.channel.delete();
+  try {
 
-  }, 120000);
+    const member =
+      await channel.guild.members.fetch(
+        user.id
+      );
+
+    await member.kick(
+      'Verification timeout'
+    );
+
+    console.log(
+      `AUTO KICKED: ${member.user.tag}`
+    );
+
+  } catch (error) {
+
+    console.log(
+      'AUTO KICK FAILED'
+    );
+
+    console.error(error);
+  }
+
+  await channel.delete();
+
+}, 120000);
 }
 
 // REJECT

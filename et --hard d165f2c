@@ -1,0 +1,57 @@
+[33mb6804f0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Fixed auto-kick timer debugging and bracket issues
+[33md165f2c[m Temporary auto-kick timer set to 2 minutes for testing
+[33md5ff797[m Fixed karma role logic and moderation display separation
+[33m71062a3[m fix: remove proxy import
+[33m8d5723e[m fix: reddit proxy removed, using public json endpoint
+[33m28191df[m Improved manual moderation verification flow
+[33m6fcd76d[m Added stable manual review fallback flow
+[33m808761f[m Added graceful Reddit manual review fallback
+[33mf675bd8[m Switched Reddit proxy to US residential
+[33m96514c3[m Final verification flow cleanup
+[33m0c9d23c[m Handled Reddit blocked responses safely
+[33mb2aa9fe[m Handled Reddit blocked responses safely
+[33mde043be[m Added Reddit response debugging
+[33m21c26a7[m Switched to Reddit API endpoint
+[33m8e0fe5c[m Improved Reddit request headers
+[33ma1a6f12[m Fixed proxy username casing
+[33mb099277[m Added auto kick and improved role workflow
+[33m5dc21af[m Added rotating residential proxy support
+[33mc2d04f3[m Fixed sheet logic and role removal flow
+[33m3a12910[m Fixed new role removal ID mismatch
+[33mbe2340c[m Fixed correct new role ID
+[33m34f71d5[m Trigger Railway redeploy
+[33mfcfea16[m Fixed new role ID removal
+[33m4da39c0[m Fixed new role removal safety check
+[33md58110f[m Auto remove new role after approval
+[33m7027ea9[m Restored Reddit stats verification flow
+[33m17bc911[m Added sheet write debug logging
+[33me00cb88[m Improved manual verification review flow
+[33mbe6c796[m Switched verification flow to manual review mode
+[33mb83fed7[m Updated Reddit verification failure handling
+[33m9f36523[m Updated Reddit request handling
+[33m86d15e3[m Improved Reddit response validation
+[33m3faebf9[m Switched to old Reddit endpoint
+[33m4a4bdc4[m Auto remove new role after verification
+[33me77b8d7[m Added sheet status updates for moderation
+[33mf821489[m Added detailed Reddit error logging
+[33m529350d[m Restored stable Reddit endpoint
+[33mad5c2ab[m Fixed moderator role detection
+[33mae33aaf[m Finalized moderation workflow
+[33m142c099[m Switched to Reddit API endpoint
+[33m74edd17[m Fixed cache reference error
+[33ma28c60e[m Added detailed verification error logging
+[33m7c8cc7c[m Fixed verification cache typo
+[33ma64dcce[m Fixed Reddit API headers
+[33m2c3f8cb[m Fixed verified user role assignment
+[33m8dd8300[m Fixed duplicate username block
+[33m0fa4287[m Fixed moderation button rendering
+[33m24f77da[m Added moderation approval workflow
+[33mbd53c0f[m Added Reddit account age verification
+[33m499819a[m Fixed Reddit request headers
+[33m7dd4252[m Configured Railway Google credentials
+[33m7f07bca[m Improved Railway Reddit error logging
+[33mf3818d7[m KARMAHQ verification workflow completed
+[33m42fff86[m working ping command
+[33m1051f60[m final slash command setup
+[33m0d05df5[m updated slash commands
+[33m9831438[m Initial commit
