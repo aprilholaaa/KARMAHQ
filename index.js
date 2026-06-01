@@ -545,7 +545,7 @@ if (!username.trim()) {
 
 const proxyAgent =
   new HttpsProxyAgent(
-    'http://mwduomod-GB-1:fwyzeoiv2k9a@p.webshare.io:80'
+    'http://mwduomod-us-210:fwyzeoiv2k9a@p.webshare.io:80'
   );
   
 const response = await axios.get(
