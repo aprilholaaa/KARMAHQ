@@ -143,18 +143,6 @@ if (
 
   // TASKER
 
-if (
-  member.roles.cache.has(
-    '1505072480082198558'
-  )
-) {
-
-  await member.roles.remove(
-  '1505072480082198558'
-);
-
-await member.fetch(true);
-}
 
 await member.roles.add(
   '1480908809739305043'
@@ -198,7 +186,16 @@ await member.roles.add(
       '1504544612726079669'
     );
   }
+if (
+  member.roles.cache.has(
+    '1505072480082198558'
+  )
+) {
 
+  await member.roles.remove(
+    '1505072480082198558'
+  );
+}
   const disabledButtons =
     new ActionRowBuilder()
       .addComponents(
@@ -362,6 +359,15 @@ if (existingRowIndex !== -1) {
     }
   });
 }
+
+const member =
+  await interaction.guild.members.fetch(
+    targetUserId
+  );
+
+await member.kick(
+  'Verification rejected'
+);
   await interaction.reply(
 
 `❌ Verification Failed
@@ -762,6 +768,56 @@ Please wait for moderator manual review.`
 
 }
 });
+
+client.on(
+  'guildMemberAdd',
+  async member => {
+
+    setTimeout(async () => {
+
+      try {
+
+        const refreshedMember =
+          await member.guild.members.fetch(
+            member.id
+          );
+
+        const hasNewRole =
+          refreshedMember.roles.cache.has(
+            '1505072480082198558'
+          );
+
+        const hasTasker =
+          refreshedMember.roles.cache.has(
+            '1480908809739305043'
+          );
+
+        if (
+          hasNewRole &&
+          !hasTasker
+        ) {
+
+          await refreshedMember.kick(
+            'Inactive new user after 48 hours'
+          );
+
+          console.log(
+            `AUTO KICKED: ${member.user.tag}`
+          );
+        }
+
+      } catch (error) {
+
+        console.log(
+          'AUTO KICK ERROR'
+        );
+
+        console.error(error);
+      }
+
+    }, 48 * 60 * 60 * 1000);
+  }
+);
 
 client.login(process.env.DISCORD_TOKEN);
 
