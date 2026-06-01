@@ -611,13 +611,19 @@ const data = redditBlocked
   : response.data.data;
 
 const postKarma =
-  data.link_karma || 0;
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : data.link_karma || 0;
 
 const commentKarma =
-  data.comment_karma || 0;
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : data.comment_karma || 0;
 
 const totalKarma =
-  postKarma + commentKarma;
+  redditBlocked
+    ? 'MODERATION CHECK'
+    : postKarma + commentKarma;
 
 const createdDate =
   new Date(data.created_utc * 1000);
