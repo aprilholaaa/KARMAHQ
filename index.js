@@ -568,8 +568,20 @@ const response = await axios.get(
   }
 );
 
-console.log(response.data);
+console.log(
+  'RESPONSE STATUS:',
+  response.status
+);
 
+console.log(
+  'RESPONSE HEADERS:',
+  response.headers
+);
+
+console.log(
+  'RESPONSE DATA:',
+  response.data
+);
 if (
   response.status !== 200 ||
   !response.data?.data
