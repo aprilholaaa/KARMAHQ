@@ -13,8 +13,6 @@ const {
 } = require('discord.js');
 
 const axios = require('axios');
-const { HttpsProxyAgent } =
-  require('https-proxy-agent');
 const { google } = require('googleapis');
 
 const client = new Client({
