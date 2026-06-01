@@ -433,7 +433,18 @@ client.on('channelCreate', async channel => {
       console.log(
         'VERIFICATION TICKET DETECTED'
       );
+     const firstMember =
+  channel.permissionOverwrites.cache.find(
+    overwrite =>
+      overwrite.type === 1
+  );
 
+if (firstMember) {
+
+  await channel.setTopic(
+    firstMember.id
+  );
+}
       // SEND INSTRUCTIONS
       await channel.send(
 
@@ -481,26 +492,34 @@ This ticket will now be closed automatically.`
 
             );
 
-            const members =
-  await channel.guild.members.fetch();
+            const targetUserId =
+  channel.topic;
 
-const targetMember =
-  members.find(member =>
-    member.roles.cache.has(
-      '1505072480082198558'
-    ) &&
-    !member.user.bot
-  );
+if (targetUserId) {
 
-if (targetMember) {
+  try {
 
-  await targetMember.kick(
-    'Verification timeout'
-  );
+    const member =
+      await channel.guild.members.fetch(
+        targetUserId
+      );
 
-  console.log(
-    `AUTO KICKED: ${targetMember.user.tag}`
-  );
+    await member.kick(
+      'Verification timeout'
+    );
+
+    console.log(
+      `AUTO KICKED: ${member.user.tag}`
+    );
+
+  } catch (error) {
+
+    console.log(
+      'AUTO KICK FAILED'
+    );
+
+    console.error(error);
+  }
 }
 
 await channel.delete();
