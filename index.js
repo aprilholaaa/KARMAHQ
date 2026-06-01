@@ -548,7 +548,7 @@ const proxyAgent =
     'http://mwduomod-us-210:fwyzeoiv2k9a@p.webshare.io:80'
   );
   
-const response = await axios.get(
+ const response = await axios.get(
   `https://api.reddit.com/user/${username}/about`,
   {
     headers: {
@@ -591,9 +591,19 @@ if (
   !response.data?.data
 ) {
 
-  throw new Error(
-    `Reddit API blocked request: ${response.status}`
-  );
+  console.log(
+  'Reddit API blocked, switching to manual review'
+);
+
+return await message.channel.send({
+
+  content:
+
+`⚠️ Reddit automatic verification is temporarily unavailable.
+
+Your verification request has been sent to moderators for manual review.`
+
+});
 }
 
 const data = response.data.data;
