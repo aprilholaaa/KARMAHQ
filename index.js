@@ -541,8 +541,9 @@ if (!username) {
 
 const proxyAgent =
   new HttpsProxyAgent(
-'http://mwduomod-gb-1:fwyzeoiv8r0h@p.webshare.io:80'  );
-
+    'http://mwduomod-GB-1:fwyzeoiv2k9a@p.webshare.io:80'
+  );
+  
 const response = await axios.get(
   `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
   {
