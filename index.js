@@ -570,6 +570,16 @@ const response = await axios.get(
 
 console.log(response.data);
 
+if (
+  response.status !== 200 ||
+  !response.data?.data
+) {
+
+  throw new Error(
+    `Reddit API blocked request: ${response.status}`
+  );
+}
+
 const data = response.data.data;
 
 const postKarma =
