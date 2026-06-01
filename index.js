@@ -545,7 +545,7 @@ const proxyAgent =
   );
   
 const response = await axios.get(
-  `https://www.reddit.com/user/${username}/about.json?raw_json=1`,
+  `https://api.reddit.com/user/${username}/about`,
   {
     headers: {
       headers: {
