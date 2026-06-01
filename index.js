@@ -481,13 +481,31 @@ This ticket will now be closed automatically.`
 
             );
 
-            setTimeout(async () => {
+            const members =
+  await channel.guild.members.fetch();
 
-              await channel.delete();
+const targetMember =
+  members.find(member =>
+    member.roles.cache.has(
+      '1505072480082198558'
+    ) &&
+    !member.user.bot
+  );
 
-            }, 120000);
+if (targetMember) {
+
+  await targetMember.kick(
+    'Verification timeout'
+  );
+
+  console.log(
+    `AUTO KICKED: ${targetMember.user.tag}`
+  );
+}
+
+await channel.delete();
           }
-
+        
         } catch (error) {
 
           console.error(
