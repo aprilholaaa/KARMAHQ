@@ -548,24 +548,27 @@ const response = await axios.get(
   `https://api.reddit.com/user/${username}/about`,
   {
     headers: {
-      headers: {
-  'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
 
-  'Accept':
-    'application/json',
+      'Accept':
+        'application/json',
 
-  'Accept-Language':
-    'en-US,en;q=0.9'
-},    },
+      'Accept-Language':
+        'en-US,en;q=0.9'
+    },
 
     httpsAgent: proxyAgent,
 
     proxy: false,
 
-    timeout: 10000
+    timeout: 10000,
+
+    validateStatus: () => true
   }
 );
+
+console.log(response.data);
 
 const data = response.data.data;
 
