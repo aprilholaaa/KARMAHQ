@@ -760,28 +760,15 @@ if (existingRowIndex === -1) {
 await message.channel.send({
 
   content:
-
 `KARMAHQ REPORT
 
 Username: ${username}
 
-Post Karma: ${
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : postKarma
-}
+Post Karma: ${postKarma}
 
-Comment Karma: ${
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : commentKarma
-}
+Comment Karma: ${commentKarma}
 
-Total Karma: ${
-  redditBlocked
-    ? 'MODERATION CHECK'
-    : totalKarma
-}
+Total Karma: ${totalKarma}
 
 Karma Level: ${karmaLevel}
 
@@ -798,6 +785,7 @@ Verification: ${verificationResult}
 Your Reddit account statistics have been submitted successfully.
 
 Please wait while the moderation team reviews your account.`,
+
 
   components: [buttons]
 
