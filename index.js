@@ -600,8 +600,11 @@ const users =
 const exactUser =
   users.find(
     u =>
-      u.name.toLowerCase() ===
-      username.toLowerCase()
+      
+u.name.toLowerCase()
+.includes(
+  username.toLowerCase()
+)
   );
 
 if (!exactUser) {
