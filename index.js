@@ -572,60 +572,64 @@ if (!username) {
 if (!username.trim()) {
   return;
 }
+```javascript
 const response =
   await axios.get(
 
-    `https://old.reddit.com/user/${username}`,
+    'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
 
     {
+      params: {
+        query: username
+      },
+
       headers: {
-        'User-Agent':
-          'Mozilla/5.0'
+        'x-rapidapi-key':
+          process.env.RAPIDAPI_KEY,
+
+        'x-rapidapi-host':
+          'real-time-reddit-scraper1.p.rapidapi.com'
       },
 
       timeout: 10000
     }
   );
 
-const $ =
-  cheerio.load(response.data);
+const users =
+  response.data.data || [];
 
-let postKarma = 0;
-let commentKarma = 0;
+const exactUser =
+  users.find(
+    u =>
+      u.name.toLowerCase() ===
+      username.toLowerCase()
+  );
 
-$('.karma').each((i, el) => {
+if (!exactUser) {
 
-  const text =
-    $(el).text();
-
-  if (
-    text.includes('post karma')
-  ) {
-
-    postKarma =
-      parseInt(
-        text.replace(/\D/g, '')
-      ) || 0;
-  }
-
-  if (
-    text.includes('comment karma')
-  ) {
-
-    commentKarma =
-      parseInt(
-        text.replace(/\D/g, '')
-      ) || 0;
-  }
-});
+  return message.channel.send(
+    '❌ Reddit user not found.'
+  );
+}
 
 const totalKarma =
-  postKarma + commentKarma;
+  exactUser.karma.total || 0;
+
+const postKarma =
+  totalKarma;
+
+const commentKarma = 0;
 
 const data = {
-  over_18: false
+  over_18:
+    exactUser.profile.isNsfw
 };
 
+const createdDate =
+  new Date(
+    exactUser.profile.createdAt
+  );
+```
 const createdDate =
   new Date(data.created_utc * 1000);
 
