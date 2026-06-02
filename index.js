@@ -572,7 +572,6 @@ if (!username) {
 if (!username.trim()) {
   return;
 }
-```javascript
 const response =
   await axios.get(
 
@@ -629,9 +628,6 @@ const createdDate =
   new Date(
     exactUser.profile.createdAt
   );
-```
-const createdDate =
-  new Date(data.created_utc * 1000);
 
 const now = new Date();
 
@@ -653,17 +649,14 @@ if (totalKarma >= 1000) {
   karmaLevel = 'HIGH';
 
 } else if (totalKarma >= 200) {
-
-  karmaLevel = 'MEDIUM';
+ karmaLevel = 'MEDIUM';
 }
 let verificationResult =
   'PENDING REVIEW';
     
-    const existingRows =
+  const existingRows =
   await sheets.spreadsheets.values.get({
-
     spreadsheetId: SPREADSHEET_ID,
-
     range: 'Sheet1!A:AZ'
   });
 
