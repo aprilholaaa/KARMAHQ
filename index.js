@@ -13,6 +13,7 @@ const {
 } = require('discord.js');
 
 const axios = require('axios');
+const cheerio = require('cheerio');
 const { google } = require('googleapis');
 
 const client = new Client({
@@ -571,67 +572,59 @@ if (!username) {
 if (!username.trim()) {
   return;
 }
+const response =
+  await axios.get(
 
-const response = await axios.get(
-  `https://www.reddit.com/user/${username}/about.json`,
-  {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      'Accept': 'application/json',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Cache-Control': 'no-cache',
-      'Referer': 'https://www.reddit.com/'
-    },
-    timeout: 10000,
-    validateStatus: () => true
-  }
-);
-console.log(
-  'RESPONSE STATUS:',
-  response.status
-);
+    `https://old.reddit.com/user/${username}`,
 
-console.log(
-  'RESPONSE HEADERS:',
-  response.headers
-);
+    {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0'
+      },
 
-console.log(
-  'RESPONSE DATA TYPE:',
-  typeof response.data
-);
-let redditBlocked = false;
-
-if (
-  response.status !== 200 ||
-  !response.data?.data
-) {
-
-  redditBlocked = true;
-
-  console.log(
-    'Reddit API blocked, switching to manual review'
-  );
-}
-
-const data = redditBlocked
-  ? {
-      link_karma: 0,
-      comment_karma: 0,
-      created_utc:
-        Date.now() / 1000,
-      over_18: false
+      timeout: 10000
     }
-  : response.data.data;
+  );
 
-const postKarma =
-  data.link_karma || 0;
+const $ =
+  cheerio.load(response.data);
 
-const commentKarma =
-  data.comment_karma || 0;
+let postKarma = 0;
+let commentKarma = 0;
+
+$('.karma').each((i, el) => {
+
+  const text =
+    $(el).text();
+
+  if (
+    text.includes('post karma')
+  ) {
+
+    postKarma =
+      parseInt(
+        text.replace(/\D/g, '')
+      ) || 0;
+  }
+
+  if (
+    text.includes('comment karma')
+  ) {
+
+    commentKarma =
+      parseInt(
+        text.replace(/\D/g, '')
+      ) || 0;
+  }
+});
 
 const totalKarma =
   postKarma + commentKarma;
+
+const data = {
+  over_18: false
+};
 
 const createdDate =
   new Date(data.created_utc * 1000);
