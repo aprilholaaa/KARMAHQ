@@ -113,6 +113,8 @@ if (
   )
 ) {
 
+  await interaction.deferReply();
+
   const targetUserId =
     interaction.customId.split('_')[1];
 
@@ -308,7 +310,7 @@ if (existingRowIndex !== -1) {
   });
 }
 
-await interaction.reply(
+await interaction.editReply(
 
  `✅ Verification Successful
 
@@ -438,15 +440,13 @@ This ticket will now be closed automatically.`
 
   console.error(error);
 
-  if (!interaction.replied) {
+  try {
 
-    await interaction.reply({
-      content:
-        '❌ Approval failed. Check Railway logs.',
-      ephemeral: true
-    });
+  await interaction.editReply(
+    '❌ Approval failed. Check Railway logs.'
+  );
 
-  }
+} catch {}
 }
 
 });
