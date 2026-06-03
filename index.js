@@ -118,27 +118,38 @@ if (
   const targetUserId =
     interaction.customId.split('_')[1];
 
-  const verificationData =
-    verificationCache.get(
-      targetUserId
-    );
+  const existingRows =
+  await sheets.spreadsheets.values.get({
 
-  if (!verificationData) {
+    spreadsheetId: SPREADSHEET_ID,
 
-    return interaction.reply({
-      content:
-        '❌ Verification data expired.',
-      ephemeral: true
-    });
+    range: 'Sheet1!A:AZ'
+  });
+
+const rows =
+  existingRows.data.values || [];
+
+let totalKarma = 0;
+
+for (let i = 1; i < rows.length; i++) {
+
+  const row = rows[i];
+
+  if (
+    String(row[3]).trim() ===
+    String(targetUserId).trim()
+  ) {
+
+    totalKarma =
+      Number(row[8]) || 0;
+
+    break;
   }
-
-  const totalKarma =
-    verificationData.totalKarma;
-
+}
   const member =
-    await interaction.guild.members.fetch(
-      verificationData.userId
-    );
+  await interaction.guild.members.fetch(
+    targetUserId
+  );
 
   // TASKER
 
@@ -219,17 +230,6 @@ if (
   await interaction.message.edit({
     components: [disabledButtons]
   });
-
-  const existingRows =
-  await sheets.spreadsheets.values.get({
-
-    spreadsheetId: SPREADSHEET_ID,
-
-    range: 'Sheet1!A:AZ'
-  });
-
-const rows =
-  existingRows.data.values || [];
 
 let existingRowIndex = -1;
 
@@ -614,12 +614,6 @@ if (!exactUser) {
 const totalKarma =
   exactUser.karma?.total || 0;
 
-const postKarma =
-  'UNAVAILABLE';
-
-const commentKarma =
-  'UNAVAILABLE';
-
 const data = {
   over_18:
     exactUser.profile.isNsfw
@@ -688,8 +682,8 @@ const rowData = [
   message.author.id,
   content,
   username,
-  postKarma,
-  commentKarma,
+  '',
+  '',
   totalKarma,
   karmaLevel,
   ageText,
@@ -764,10 +758,6 @@ await message.channel.send({
 `KARMAHQ REPORT
 
 Username: ${username}
-
-Post Karma: ${postKarma}
-
-Comment Karma: ${commentKarma}
 
 Total Karma: ${totalKarma}
 
