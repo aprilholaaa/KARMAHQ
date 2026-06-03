@@ -432,6 +432,49 @@ This ticket will now be closed automatically.`
 }, 5000);
 
 }
+// ALT PASS
+if (
+  interaction.customId.startsWith(
+    'altpass_'
+  )
+) {
+
+  const username =
+    interaction.customId.split('_')[1];
+
+  return interaction.reply({
+
+    content:
+
+`✅ ALT VERIFIED
+
+Reddit account approved:
+${username}`
+
+  });
+}
+
+// ALT FAIL
+if (
+  interaction.customId.startsWith(
+    'altfail_'
+  )
+) {
+
+  const username =
+    interaction.customId.split('_')[1];
+
+  return interaction.reply({
+
+    content:
+
+`❌ ALT REJECTED
+
+Reddit account rejected:
+${username}`
+
+  });
+}
 
 } catch (error) {
 
@@ -705,22 +748,29 @@ const existingRows =
 const rows =
   existingRows.data.values || [];
 
-const redditExists =
-  rows.some(row =>
-
-    String(row[5] || '')
-.split('?')[0]
-.replace(/\//g, '')
-.trim()
-.toLowerCase() ===
+const cleanUsername =
 
 String(username || '')
-.split('?')[0]
+.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
 .replace(/\//g, '')
+.split('?')[0]
 .trim()
-.toLowerCase()
-  );
+.toLowerCase();
 
+const redditExists =
+  rows.some(row => {
+
+    const sheetUsername =
+
+String(row[5] || '')
+.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
+.replace(/\//g, '')
+.split('?')[0]
+.trim()
+.toLowerCase();
+
+    return sheetUsername === cleanUsername;
+  });
 if (redditExists) {
 
   return message.channel.send(
@@ -749,14 +799,28 @@ if (redditExists) {
   const totalKarma =
     exactUser.karma?.total || 0;
 
-  let result = 'FAIL ❌';
+  const buttons =
+  new ActionRowBuilder()
+    .addComponents(
 
-  if (totalKarma >= 200) {
+      new ButtonBuilder()
+        .setCustomId(
+          `altpass_${username}`
+        )
+        .setLabel('PASS')
+        .setStyle(ButtonStyle.Success),
 
-    result = 'PASS ✅';
-  }
+      new ButtonBuilder()
+        .setCustomId(
+          `altfail_${username}`
+        )
+        .setLabel('FAIL')
+        .setStyle(ButtonStyle.Danger)
+    );
 
-  await message.channel.send(
+await message.channel.send({
+
+content:
 
 `KARMAHQ ALT CHECK
 
@@ -764,9 +828,11 @@ Username: ${username}
 
 Total Karma: ${totalKarma}
 
-Result: ${result}`
+Moderator review required.`,
 
-  );
+components: [buttons]
+
+});
 
   return;
 }
@@ -907,21 +973,29 @@ const existingRows =
 const rows =
   existingRows.data.values || [];
 
+const cleanUsername =
+
+String(username || '')
+.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
+.replace(/\//g, '')
+.split('?')[0]
+.trim()
+.toLowerCase();
+
 const redditExists =
-  rows.some(row =>
+  rows.some(row => {
 
-    String(row[5] || '')
-      .split('?')[0]
-      .replace(/\//g, '')
-      .trim()
-      .toLowerCase() ===
+    const sheetUsername =
 
-    String(username || '')
-      .split('?')[0]
-      .replace(/\//g, '')
-      .trim()
-      .toLowerCase()
-  );
+String(row[5] || '')
+.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
+.replace(/\//g, '')
+.split('?')[0]
+.trim()
+.toLowerCase();
+
+    return sheetUsername === cleanUsername;
+  });
 
 if (redditExists) {
 
