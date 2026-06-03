@@ -283,6 +283,8 @@ setTimeout(async () => {
 
 }, 5000);
 
+}
+
 // REJECT
 if (
   interaction.customId.startsWith(
@@ -382,8 +384,10 @@ This ticket will now be closed automatically.`
   await interaction.channel.delete();
 
 }, 5000);
+
 }
-  } catch (error) {
+
+} catch (error) {
 
   console.error(
     'BUTTON INTERACTION ERROR'
