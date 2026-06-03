@@ -149,6 +149,49 @@ for (let i = 1; i < rows.length; i++) {
     targetUserId
   );
 
+  const taskChannel =
+  await interaction.guild.channels.create({
+
+    name:
+     member.user.username,
+    type: ChannelType.GuildText,
+
+    parent:
+      'CATEGORY_ID_HERE',
+
+    permissionOverwrites: [
+
+      {
+        id:
+          interaction.guild.id,
+
+        deny:
+          ['ViewChannel']
+      },
+
+      {
+        id:
+          member.id,
+
+        allow: [
+          'ViewChannel',
+          'SendMessages',
+          'ReadMessageHistory'
+        ]
+      }
+    ]
+  });
+
+await taskChannel.send(
+
+`🎉 Welcome <@${member.id}>
+
+Your verification has been approved.
+
+A moderator will contact you shortly regarding tasks and workflow.`
+
+);
+
   // TASKER
 
 
