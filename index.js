@@ -804,7 +804,6 @@ const response =
       timeout: 10000
     }
   );
-
 const users =
   response.data.data || [];
 
@@ -822,6 +821,7 @@ if (!exactUser) {
     '❌ Reddit user not found.'
   );
 }
+
 const totalKarma =
   exactUser.karma?.total || 0;
 
@@ -855,20 +855,25 @@ if (totalKarma >= 1000) {
   karmaLevel = 'HIGH';
 
 } else if (totalKarma >= 200) {
- karmaLevel = 'MEDIUM';
+
+  karmaLevel = 'MEDIUM';
 }
+
 let verificationResult =
   'PENDING REVIEW';
-    
-  const existingRows =
+
+const existingRows =
   await sheets.spreadsheets.values.get({
+
     spreadsheetId: SPREADSHEET_ID,
+
     range: 'Sheet1!A:AZ'
   });
 
 const rows =
   existingRows.data.values || [];
-  const redditExists =
+
+const redditExists =
   rows.some(row =>
 
     String(row[5]).trim().toLowerCase() ===
