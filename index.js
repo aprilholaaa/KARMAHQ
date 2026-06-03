@@ -458,6 +458,35 @@ if (
   await interaction.message.edit({
     components: [disabledButtons]
   });
+  await sheets.spreadsheets.values.append({
+
+  spreadsheetId: SPREADSHEET_ID,
+
+  range: 'Sheet1!A:O',
+
+  valueInputOption: 'USER_ENTERED',
+
+  requestBody: {
+
+    values: [[
+      '',
+      'ALT VERIFY',
+      '',
+      '',
+      '',
+      username,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      'ALT',
+      'APPROVED',
+      ''
+    ]]
+  }
+});
 
   return interaction.reply({
 
@@ -497,7 +526,35 @@ if (
   await interaction.message.edit({
     components: [disabledButtons]
   });
+await sheets.spreadsheets.values.append({
 
+  spreadsheetId: SPREADSHEET_ID,
+
+  range: 'Sheet1!A:O',
+
+  valueInputOption: 'USER_ENTERED',
+
+  requestBody: {
+
+    values: [[
+      '',
+      'ALT VERIFY',
+      '',
+      '',
+      '',
+      username,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      'ALT',
+      'REJECTED',
+      ''
+    ]]
+  }
+});
   return interaction.reply({
 
     content:
