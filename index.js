@@ -601,10 +601,8 @@ const exactUser =
   users.find(
     u =>
       
-u.name.toLowerCase()
-.includes(
-  username.toLowerCase()
-)
+u.name.toLowerCase() ===
+username.toLowerCase()
   );
 
 if (!exactUser) {
@@ -613,14 +611,22 @@ if (!exactUser) {
     '❌ Reddit user not found.'
   );
 }
+console.log(
+  JSON.stringify(exactUser, null, 2)
+);
+const postKarma =
+  exactUser.karma?.post || 
+  exactUser.karma?.link || 
+  exactUser.karma?.link_karma || 
+  0;
+
+const commentKarma =
+  exactUser.karma?.comment || 
+  exactUser.karma?.comment_karma || 
+  0;
 
 const totalKarma =
-  exactUser.karma.total || 0;
-
-const postKarma =
-  totalKarma;
-
-const commentKarma = 0;
+  postKarma + commentKarma;
 
 const data = {
   over_18:
