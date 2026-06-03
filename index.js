@@ -450,7 +450,7 @@ if (
           .setCustomId(
             interaction.customId
           )
-          .setLabel('USED')
+          .setLabel('PASS')
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(true)
       );
@@ -489,7 +489,7 @@ if (
           .setCustomId(
             interaction.customId
           )
-          .setLabel('USED')
+          .setLabel('FAIL')
           .setStyle(ButtonStyle.Secondary)
           .setDisabled(true)
       );
@@ -1075,7 +1075,19 @@ const rowData = [
   ''
 ];
 
-console.log('SHEET WRITE START');
+  console.log('SHEET WRITE START');
+
+console.log(
+  'USERNAME:',
+  username
+);
+
+console.log(
+  'DISCORD:',
+  message.author.id
+);
+
+try {
 
 if (existingRowIndex === -1) {
 
@@ -1106,6 +1118,19 @@ if (existingRowIndex === -1) {
       values: [rowData]
     }
   });
+}
+
+console.log(
+  'SHEET WRITE SUCCESS'
+);
+
+} catch (sheetError) {
+
+  console.log(
+    'SHEET WRITE FAILED'
+  );
+
+  console.error(sheetError);
 }
     // PASS
 
