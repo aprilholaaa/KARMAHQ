@@ -268,6 +268,11 @@ if (existingRowIndex !== -1) {
 await interaction.reply(
 
  `✅ Verification Successful
+ setTimeout(async () => {
+
+  await interaction.channel.delete();
+
+}, 5000);
 
 <@${targetUserId}> you are successfully verified.
 
