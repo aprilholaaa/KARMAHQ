@@ -708,8 +708,17 @@ const rows =
 const redditExists =
   rows.some(row =>
 
-    String(row[5]).trim().toLowerCase() ===
-    username.trim().toLowerCase()
+    String(row[5] || '')
+.split('?')[0]
+.replace(/\//g, '')
+.trim()
+.toLowerCase() ===
+
+String(username || '')
+.split('?')[0]
+.replace(/\//g, '')
+.trim()
+.toLowerCase()
   );
 
 if (redditExists) {
@@ -901,8 +910,17 @@ const rows =
 const redditExists =
   rows.some(row =>
 
-    String(row[5]).trim().toLowerCase() ===
-    username.trim().toLowerCase()
+    String(row[5] || '')
+      .split('?')[0]
+      .replace(/\//g, '')
+      .trim()
+      .toLowerCase() ===
+
+    String(username || '')
+      .split('?')[0]
+      .replace(/\//g, '')
+      .trim()
+      .toLowerCase()
   );
 
 if (redditExists) {
