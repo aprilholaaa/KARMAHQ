@@ -439,8 +439,14 @@ if (
   )
 ) {
 
-  const username =
-    interaction.customId.split('_')[1];
+  const parts =
+  interaction.customId.split('_');
+
+const username =
+  parts[1];
+
+const totalKarma =
+  parts[2];
 
   const disabledButtons =
     new ActionRowBuilder()
@@ -477,14 +483,14 @@ if (
       username,
       '',
       '',
-      '',
+      totalKarma,
       '',
       '',
       '',
       'ALT',
       'APPROVED',
       ''
-    ]]
+]]
   }
 });
 
@@ -507,8 +513,14 @@ if (
   )
 ) {
 
-  const username =
-    interaction.customId.split('_')[1];
+  const parts =
+  interaction.customId.split('_');
+
+const username =
+  parts[1];
+
+const totalKarma =
+  parts[2];
 
   const disabledButtons =
     new ActionRowBuilder()
@@ -545,14 +557,14 @@ await sheets.spreadsheets.values.append({
       username,
       '',
       '',
-      '',
+      totalKarma,
       '',
       '',
       '',
       'ALT',
       'REJECTED',
       ''
-    ]]
+]]
   }
 });
   return interaction.reply({
@@ -896,15 +908,15 @@ if (redditExists) {
 
       new ButtonBuilder()
         .setCustomId(
-          `altpass_${username}`
+`altpass_${username}_${totalKarma}`
         )
         .setLabel('PASS')
         .setStyle(ButtonStyle.Success),
 
       new ButtonBuilder()
         .setCustomId(
-          `altfail_${username}`
-        )
+`altfail_${username}_${totalKarma}`
+)
         .setLabel('FAIL')
         .setStyle(ButtonStyle.Danger)
     );
