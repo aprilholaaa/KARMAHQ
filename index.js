@@ -33,8 +33,6 @@ const sheets = google.sheets({
   version: 'v4',
   auth
 });
-const verificationCache =
-  new Map();
 
 const SPREADSHEET_ID =
   '1XagI-OGeho9CXxlIakjtkR9tj0x0aURjiU953ESbv0Q';
@@ -196,16 +194,9 @@ await member.roles.add(
       '1504544612726079669'
     );
   }
-if (
-  member.roles.cache.has(
-    '1505072480082198558'
-  )
-) {
-
-  await member.roles.remove(
-    '1505072480082198558'
-  );
-}
+await member.roles.remove(
+  '1505072480082198558'
+);
   const disabledButtons =
     new ActionRowBuilder()
       .addComponents(
@@ -372,9 +363,9 @@ This ticket will now be closed automatically.`
 
   setTimeout(async () => {
 
-    await interaction.channel.delete();
+  await interaction.channel.delete();
 
-  }, 120000);
+}, 5000);
 }
   } catch (error) {
 
@@ -421,7 +412,7 @@ if (firstMember) {
 
 `📌 KARMAHQ VERIFICATION
 
-Please send your Reddit profile link within 10 minutes.
+Please send your Reddit profile link within 48 hours.
 
 Example:
 https://reddit.com/u/yourusername
@@ -431,7 +422,7 @@ this ticket will be closed automatically.`
 
       );
 
-      // START 10 MIN TIMER
+      // START 48 hrs 1 MIN TIMER
       setTimeout(async () => {
 
         try {
@@ -726,13 +717,6 @@ if (existingRowIndex === -1) {
   });
 }
     // PASS
-    verificationCache.set(
-  message.author.id,
-  {
-    totalKarma,
-    userId: message.author.id
-  }
-);
 
    const buttons =
   new ActionRowBuilder()
