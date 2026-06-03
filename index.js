@@ -194,9 +194,20 @@ await member.roles.add(
       '1504544612726079669'
     );
   }
-await member.roles.remove(
-  '1505072480082198558'
-);
+try {
+
+  await member.roles.remove(
+    '1505072480082198558'
+  );
+
+} catch (error) {
+
+  console.log(
+    'NEW ROLE REMOVE FAILED'
+  );
+
+  console.error(error);
+}
   const disabledButtons =
     new ActionRowBuilder()
       .addComponents(
@@ -369,12 +380,22 @@ This ticket will now be closed automatically.`
 }
   } catch (error) {
 
-    console.error(
-      'BUTTON INTERACTION ERROR'
-    );
+  console.error(
+    'BUTTON INTERACTION ERROR'
+  );
 
-    console.error(error);
+  console.error(error);
+
+  if (!interaction.replied) {
+
+    await interaction.reply({
+      content:
+        '❌ Approval failed. Check Railway logs.',
+      ephemeral: true
+    });
+
   }
+}
 
 });
 // AUTO TICKET DETECTION
