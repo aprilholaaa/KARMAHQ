@@ -442,6 +442,23 @@ if (
   const username =
     interaction.customId.split('_')[1];
 
+  const disabledButtons =
+    new ActionRowBuilder()
+      .addComponents(
+
+        new ButtonBuilder()
+          .setCustomId(
+            interaction.customId
+          )
+          .setLabel('USED')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      );
+
+  await interaction.message.edit({
+    components: [disabledButtons]
+  });
+
   return interaction.reply({
 
     content:
@@ -463,6 +480,23 @@ if (
 
   const username =
     interaction.customId.split('_')[1];
+
+  const disabledButtons =
+    new ActionRowBuilder()
+      .addComponents(
+
+        new ButtonBuilder()
+          .setCustomId(
+            interaction.customId
+          )
+          .setLabel('USED')
+          .setStyle(ButtonStyle.Secondary)
+          .setDisabled(true)
+      );
+
+  await interaction.message.edit({
+    components: [disabledButtons]
+  });
 
   return interaction.reply({
 
