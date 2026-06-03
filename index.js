@@ -694,7 +694,32 @@ if (!hasPermission) {
 
   const users =
     response.data.data || [];
+const existingRows =
+  await sheets.spreadsheets.values.get({
 
+    spreadsheetId: SPREADSHEET_ID,
+
+    range: 'Sheet1!A:AZ'
+  });
+
+const rows =
+  existingRows.data.values || [];
+
+const redditExists =
+  rows.some(row =>
+
+    String(row[5]).trim().toLowerCase() ===
+    username.trim().toLowerCase()
+  );
+
+if (redditExists) {
+
+  return message.channel.send(
+
+`❌ This Reddit account already exists in records.`
+
+  );
+}
   const exactUser =
     users.find(
       u =>
