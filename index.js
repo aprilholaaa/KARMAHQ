@@ -610,6 +610,7 @@ if (!hasPermission) {
 
   );
 }
+ await message.delete();
 
   const messages =
     await message.channel.messages.fetch({
@@ -867,6 +868,21 @@ let verificationResult =
 
 const rows =
   existingRows.data.values || [];
+  const redditExists =
+  rows.some(row =>
+
+    String(row[5]).trim().toLowerCase() ===
+    username.trim().toLowerCase()
+  );
+
+if (redditExists) {
+
+  return message.channel.send(
+
+`❌ This Reddit account already exists in records.`
+
+  );
+}
 
 let existingRowIndex = -1;
 
