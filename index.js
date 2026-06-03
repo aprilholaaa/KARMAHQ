@@ -312,11 +312,12 @@ if (existingRowIndex !== -1) {
 
 await interaction.editReply(
 
- `✅ Verification Successful
+`✅ Verification Successful
 
 <@${targetUserId}> you are successfully verified.
 
-Your Reddit account has been approved by the moderation team.
+Please continue here:
+${taskChannel}
 
 Thank you.`
 
@@ -326,7 +327,7 @@ setTimeout(async () => {
 
   await interaction.channel.delete();
 
-}, 5000);
+}, 15000);
 
 }
 
