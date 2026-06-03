@@ -611,22 +611,14 @@ if (!exactUser) {
     '❌ Reddit user not found.'
   );
 }
-console.log(
-  JSON.stringify(exactUser, null, 2)
-);
+const totalKarma =
+  exactUser.karma?.total || 0;
+
 const postKarma =
-  exactUser.karma?.post || 
-  exactUser.karma?.link || 
-  exactUser.karma?.link_karma || 
-  0;
+  'UNAVAILABLE';
 
 const commentKarma =
-  exactUser.karma?.comment || 
-  exactUser.karma?.comment_karma || 
-  0;
-
-const totalKarma =
-  postKarma + commentKarma;
+  'UNAVAILABLE';
 
 const data = {
   over_18:
