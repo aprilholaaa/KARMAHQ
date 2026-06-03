@@ -197,7 +197,7 @@ await member.roles.add(
 try {
 
   await member.roles.remove(
-    '1505072480082198558'
+    '1480908434365747343'
   );
 
 } catch (error) {
@@ -835,7 +835,7 @@ client.on(
 
         const hasNewRole =
           refreshedMember.roles.cache.has(
-            '1505072480082198558'
+            '1480908434365747343'
           );
 
         const hasTasker =
