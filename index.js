@@ -441,12 +441,29 @@ if (
 
   const parts =
   interaction.customId.split('_');
-
-const username =
+const discordId =
   parts[1];
 
-const totalKarma =
+const username =
   parts[2];
+
+const postKarma =
+  parts[3];
+
+const commentKarma =
+  parts[4];
+
+const totalKarma =
+  parts[5];
+
+const karmaLevel =
+  parts[6];
+
+const ageText =
+  parts[7];
+
+const over18 =
+  parts[8];
 
   const disabledButtons =
     new ActionRowBuilder()
@@ -476,17 +493,17 @@ const totalKarma =
 
     values: [[
       '',
-      'ALT VERIFY',
-      '',
-      '',
-      '',
+      interaction.user.username,
+      interaction.member.displayName || '',
+      discordId,
+      `https://reddit.com/u/${username}`,
       username,
-      '',
-      '',
+      postKarma,
+      commentKarma,
       totalKarma,
-      '',
-      '',
-      '',
+      karmaLevel,
+      ageText,
+      over18,
       'ALT',
       'APPROVED',
       ''
@@ -515,12 +532,29 @@ if (
 
   const parts =
   interaction.customId.split('_');
-
-const username =
+const discordId =
   parts[1];
 
-const totalKarma =
+const username =
   parts[2];
+
+const postKarma =
+  parts[3];
+
+const commentKarma =
+  parts[4];
+
+const totalKarma =
+  parts[5];
+
+const karmaLevel =
+  parts[6];
+
+const ageText =
+  parts[7];
+
+const over18 =
+  parts[8];
 
   const disabledButtons =
     new ActionRowBuilder()
@@ -550,17 +584,17 @@ await sheets.spreadsheets.values.append({
 
     values: [[
       '',
-      'ALT VERIFY',
-      '',
-      '',
-      '',
+      interaction.user.username,
+      interaction.member.displayName || '',
+      discordId,
+      `https://reddit.com/u/${username}`,
       username,
-      '',
-      '',
+      postKarma,
+      commentKarma,
       totalKarma,
-      '',
-      '',
-      '',
+      karmaLevel,
+      ageText,
+      over18,
       'ALT',
       'REJECTED',
       ''
@@ -901,21 +935,63 @@ if (redditExists) {
 
   const totalKarma =
     exactUser.karma?.total || 0;
+const postKarma =
+  exactUser.karma?.post || 0;
 
+const commentKarma =
+  exactUser.karma?.comments || 0;
+
+const data = {
+  over_18:
+    exactUser.profile.isNsfw
+};
+
+const createdDate =
+  new Date(
+    exactUser.profile.createdAt
+  );
+
+const now = new Date();
+
+const diffYears =
+  now.getFullYear() -
+  createdDate.getFullYear();
+
+const ageText =
+  `${diffYears} years`;
+
+let karmaLevel = 'LOW';
+
+if (totalKarma >= 1000) {
+
+  karmaLevel = 'VERY HIGH';
+
+} else if (totalKarma >= 500) {
+
+  karmaLevel = 'HIGH';
+
+} else if (totalKarma >= 200) {
+
+  karmaLevel = 'MEDIUM';
+}
   const buttons =
   new ActionRowBuilder()
     .addComponents(
 
       new ButtonBuilder()
         .setCustomId(
-`altpass_${username}_${totalKarma}`
-        )
+
+`altpass_${message.author.id}_${username}_${postKarma}_${commentKarma}_${totalKarma}_${karmaLevel}_${ageText}_${data.over_18 ? 'YES' : 'NO'}`
+
+)
         .setLabel('PASS')
         .setStyle(ButtonStyle.Success),
 
       new ButtonBuilder()
         .setCustomId(
-`altfail_${username}_${totalKarma}`
+
+`altfail_${message.author.id}_${username}_${postKarma}_${commentKarma}_${totalKarma}_${karmaLevel}_${ageText}_${data.over_18 ? 'YES' : 'NO'}`
+
 )
         .setLabel('FAIL')
         .setStyle(ButtonStyle.Danger)
@@ -1027,6 +1103,11 @@ if (!exactUser) {
 
 const totalKarma =
   exactUser.karma?.total || 0;
+  const postKarma =
+  exactUser.karma?.post || 0;
+
+const commentKarma =
+  exactUser.karma?.comments || 0;
 
 const data = {
   over_18:
@@ -1061,7 +1142,7 @@ if (totalKarma >= 1000) {
 
   karmaLevel = 'MEDIUM';
 }
-
+  
 let verificationResult =
   'PENDING REVIEW';
 
