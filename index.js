@@ -590,6 +590,151 @@ client.on('messageCreate', async message => {
   try {
 
     if (message.author.bot) return;
+    if (
+  message.content.toLowerCase() ===
+  '!verify'
+) {
+  const hasPermission =
+  message.member.roles.cache.some(
+    role =>
+      role.name.toLowerCase().includes(
+        'master'
+      )
+  );
+
+if (!hasPermission) {
+
+  return message.channel.send(
+
+    '❌ You are not allowed to use !verify.'
+
+  );
+}
+
+  const messages =
+    await message.channel.messages.fetch({
+      limit: 10
+    });
+
+  const redditMessage =
+    [...messages.values()].find(
+      msg =>
+
+        msg.content.includes(
+          'reddit.com/u/'
+        ) ||
+
+        msg.content.includes(
+          'reddit.com/user/'
+        )
+    );
+
+  if (!redditMessage) {
+
+    return message.channel.send(
+
+      '❌ No Reddit link found.'
+
+    );
+  }
+
+  await message.channel.send(
+
+    '🔍 Verifying Reddit account...'
+
+  );
+
+  const content =
+    redditMessage.content;
+
+  let username = null;
+
+  if (content.includes('/u/')) {
+
+    username = content
+      .split('/u/')[1]
+      ?.split('/')[0];
+
+  } else if (
+    content.includes('/user/')
+  ) {
+
+    username = content
+      .split('/user/')[1]
+      ?.split('/')[0];
+  }
+
+  if (!username) {
+
+    return message.channel.send(
+      '❌ Invalid Reddit link.'
+    );
+  }
+
+  const response =
+    await axios.get(
+
+      'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
+
+      {
+        params: {
+          query: username
+        },
+
+        headers: {
+          'x-rapidapi-key':
+            process.env.RAPIDAPI_KEY,
+
+          'x-rapidapi-host':
+            'real-time-reddit-scraper1.p.rapidapi.com'
+        }
+      }
+    );
+
+  const users =
+    response.data.data || [];
+
+  const exactUser =
+    users.find(
+      u =>
+
+        u.name.toLowerCase() ===
+        username.toLowerCase()
+    );
+
+  if (!exactUser) {
+
+    return message.channel.send(
+
+      '❌ Reddit user not found.'
+
+    );
+  }
+
+  const totalKarma =
+    exactUser.karma?.total || 0;
+
+  let result = 'FAIL ❌';
+
+  if (totalKarma >= 200) {
+
+    result = 'PASS ✅';
+  }
+
+  await message.channel.send(
+
+`KARMAHQ ALT CHECK
+
+Username: ${username}
+
+Total Karma: ${totalKarma}
+
+Result: ${result}`
+
+  );
+
+  return;
+}
 
     const channelName =
       message.channel.name.toLowerCase();
