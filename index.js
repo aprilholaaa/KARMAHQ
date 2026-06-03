@@ -268,11 +268,6 @@ if (existingRowIndex !== -1) {
 await interaction.reply(
 
  `✅ Verification Successful
- setTimeout(async () => {
-
-  await interaction.channel.delete();
-
-}, 5000);
 
 <@${targetUserId}> you are successfully verified.
 
@@ -281,7 +276,12 @@ Your Reddit account has been approved by the moderation team.
 Thank you.`
 
 );
-}
+
+setTimeout(async () => {
+
+  await interaction.channel.delete();
+
+}, 5000);
 
 // REJECT
 if (
