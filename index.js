@@ -157,7 +157,7 @@ for (let i = 1; i < rows.length; i++) {
     type: ChannelType.GuildText,
 
     parent:
-      '1481311691563073773',
+      '1490048289918161166',
 
     permissionOverwrites: [
 
