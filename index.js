@@ -95,7 +95,16 @@ client.on('interactionCreate', async interaction => {
 const hasPermission =
   interaction.member.roles.cache.some(
     role =>
-      role.name.toLowerCase().includes('master')
+[
+'supreme',
+'admin',
+'manager',
+'mod'
+].some(permissionRole =>
+  role.name
+    .toLowerCase()
+    .includes(permissionRole)
+)
   );
 
 if (!hasPermission) {
@@ -243,6 +252,33 @@ https://discord.com/channels/1422894734913048616/1425069238292320279`
 await member.roles.add(
   '1425018721541423164'
 );
+
+const is18Plus =
+  String(row[11]).trim() === 'YES';
+
+if (is18Plus) {
+
+  await member.roles.add(
+    '1512111214979846237'
+  );
+}
+
+// >200
+if (totalKarma >= 200) {
+
+  await member.roles.add(
+    '1512154965039120590'
+  );
+}
+
+// >500
+if (totalKarma >= 500) {
+
+  await member.roles.add(
+    '1512154820344283207'
+  );
+}
+
   // >1K
 if (totalKarma >= 1000) {
 
@@ -681,13 +717,22 @@ client.on('channelCreate', async channel => {
 
     if (channel.type !== ChannelType.GuildText) return;
 
-    const channelName =
-      channel.name.toLowerCase();
-
     // CHECK IF VERIFICATION TICKET
-    if (
-      channelName.includes('get-verified')
-    ) {
+    const verificationCategoryIds = [
+
+'1425011923384012870',
+'1476052332327469197',
+'1497494840022274088',
+'1497502779986673835'
+
+];
+
+if (
+  verificationCategoryIds.includes(
+    channel.parentId
+  )
+)
+{
 
       console.log(
         'VERIFICATION TICKET DETECTED'
@@ -831,8 +876,15 @@ client.on('messageCreate', async message => {
   const hasPermission =
   message.member.roles.cache.some(
     role =>
-      role.name.toLowerCase().includes(
-        'master'
+      [
+'supreme',
+'admin',
+'manager',
+'mod'
+].some(permissionRole =>
+  role.name
+    .toLowerCase()
+    .includes(permissionRole)
       )
   );
 
