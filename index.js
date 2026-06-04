@@ -223,23 +223,17 @@ if (!selectedCategory) {
 
 await taskChannel.send(
 
-`📌 TASK ACCESS
+`<@${member.id}> you are verified.
 
-Hello <@${member.id}>,
+<#1487433724344926419> is your communication channel with <@&1480907840398033026> and <@&1480909177961582662>.
 
-You are verified and can now start doing tasks.
+Please read the following channels carefully to understand the workflow and rules:
 
-${taskChannel} is your assigned task channel.
+<#1484427029901348964>
 
-Please read the following channels thoroughly before starting:
+<#1484426857754660885>
 
-• https://discord.com/channels/1422894734913048616/1425073685814972446
-
-• https://discord.com/channels/1422894734913048616/1425059828111380543
-
-• https://discord.com/channels/1422894734913048616/1425069238292320279
-
-⚠️ Follow all instructions carefully before beginning work.`
+<#1484442338590986281>`
 
 );
 
