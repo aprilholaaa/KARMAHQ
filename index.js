@@ -724,13 +724,25 @@ this ticket will be closed automatically.`
             });
 
           const userResponded =
-            messages.some(msg =>
-              msg.author.bot === false &&
-              (
-                msg.content.includes('reddit.com/u/') ||
-                msg.content.includes('reddit.com/user/')
-              )
-            );
+  messages.some(msg => {
+
+    if (msg.author.bot) return false;
+
+    const content =
+      msg.content.toLowerCase().trim();
+
+    return (
+
+      content.includes('reddit.com/u/') ||
+
+      content.includes('reddit.com/user/') ||
+
+      content.startsWith('u/') ||
+
+      content.length > 2
+
+    );
+  });
 
           // NO RESPONSE
           if (!userResponded) {
@@ -858,31 +870,47 @@ if (!redditMessage) {
 
   const content =
     redditMessage.content;
+  const cleanContent =
+  content.replace('www.', '');
 
-  let username = null;
+let username = null;
 
-  if (content.includes('/u/')) {
+if (
+  cleanContent.includes('reddit.com/u/')
+) {
 
-    username = content
-      .split('/u/')[1]
-      ?.split('/')[0];
+  username = cleanContent
+    .split('/u/')[1]
+    ?.split('/')[0];
 
-  } else if (
-    content.includes('/user/')
-  ) {
+} else if (
+  cleanContent.includes('reddit.com/user/')
+) {
 
-    username = content
-      .split('/user/')[1]
-      ?.split('/')[0];
-  }
+  username = cleanContent
+    .split('/user/')[1]
+    ?.split('/')[0];
 
-  if (!username) {
+} else if (
+  cleanContent.toLowerCase().startsWith('u/')
+) {
 
-    return message.channel.send(
-      '❌ Invalid Reddit link.'
-    );
-  }
+  username = cleanContent
+    .split('u/')[1]
+    ?.trim();
 
+} else {
+
+  username =
+    cleanContent.trim();
+}
+
+if (!username) {
+
+  return message.channel.send(
+    '❌ Invalid Reddit username.'
+  );
+}
   const response =
     await axios.get(
 
@@ -1036,7 +1064,21 @@ content:
 
 Username: ${username}
 
+Post Karma: ${postKarma}
+
+Comment Karma: ${commentKarma}
+
 Total Karma: ${totalKarma}
+
+Karma Level: ${karmaLevel}
+
+Account Age: ${ageText}
+
+18+: ${data.over_18 ? 'YES' : 'NO'}
+
+NSFW: ${data.over_18 ? 'YES' : 'NO'}
+
+Status: ALT
 
 Moderator review required.`,
 
@@ -1055,6 +1097,8 @@ components: [buttons]
     ) return;
 
     const content = message.content;
+    const cleanContent =
+  content.replace('www.', '');
 
 await message.channel.send(
   '🔍 Verifying Reddit account...'
@@ -1063,18 +1107,18 @@ await message.channel.send(
 let username = null;
 
 if (
-  content.includes('reddit.com/u/')
+  cleanContent.includes('reddit.com/u/')
 ) {
 
-  username = content
+  username = cleanContent
     .split('/u/')[1]
     ?.split('/')[0];
 
 } else if (
-  content.includes('reddit.com/user/')
+  cleanContent.includes('reddit.com/user/')
 ) {
 
-  username = content
+  username = cleanContent
     .split('/user/')[1]
     ?.split('/')[0];
 
@@ -1082,13 +1126,13 @@ if (
   content.toLowerCase().startsWith('u/')
 ) {
 
-  username = content
+  username = cleanContent
     .split('u/')[1]
     ?.trim();
 
 } else {
 
-  username = content.trim();
+  username = cleanContent.trim();
 }
 
 if (!username) {
@@ -1355,6 +1399,8 @@ Karma Level: ${karmaLevel}
 Account Age: ${ageText}
 
 18+: ${data.over_18 ? 'YES' : 'NO'}
+
+NSFW: ${data.over_18 ? 'YES' : 'NO'}
 
 Status: LIVE
 
