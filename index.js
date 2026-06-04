@@ -139,6 +139,7 @@ const rows =
   existingRows.data.values || [];
 
 let totalKarma = 0;
+let is18Plus = false;
 
 for (let i = 1; i < rows.length; i++) {
 
@@ -151,7 +152,8 @@ for (let i = 1; i < rows.length; i++) {
 
     totalKarma =
       Number(row[8]) || 0;
-
+is18Plus =
+  String(row[11]).trim() === 'YES';
     break;
   }
 }
@@ -253,8 +255,6 @@ await member.roles.add(
   '1425018721541423164'
 );
 
-const is18Plus =
-  String(row[11]).trim() === 'YES';
 
 if (is18Plus) {
 
@@ -703,8 +703,8 @@ ${username}`
   try {
 
   await interaction.editReply(
-    '❌ Approval failed. Check Railway logs.'
-  );
+  '❌ Approval failed. Please try again.'
+);
 
 } catch {}
 }
