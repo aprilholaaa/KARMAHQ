@@ -1080,10 +1080,6 @@ content:
 
 Username: ${username}
 
-Post Karma: ${postKarma}
-
-Comment Karma: ${commentKarma}
-
 Total Karma: ${totalKarma}
 
 Karma Level: ${karmaLevel}
