@@ -223,11 +223,23 @@ if (!selectedCategory) {
 
 await taskChannel.send(
 
-`🎉 Welcome <@${member.id}>
+`📌 TASK ACCESS
 
-Your verification has been approved.
+Hello <@${member.id}>,
 
-A moderator will contact you shortly regarding tasks and workflow.`
+You are verified and can now start doing tasks.
+
+${taskChannel} is your assigned task channel.
+
+Please read the following channels thoroughly before starting:
+
+• https://discord.com/channels/1422894734913048616/1425073685814972446
+
+• https://discord.com/channels/1422894734913048616/1425059828111380543
+
+• https://discord.com/channels/1422894734913048616/1425069238292320279
+
+⚠️ Follow all instructions carefully before beginning work.`
 
 );
 
@@ -731,17 +743,16 @@ this ticket will be closed automatically.`
     const content =
       msg.content.toLowerCase().trim();
 
-    return (
+    const normalized =
+      content
+        .replace(/^https?:\/\//i, '')
+        .replace(/^www\./i, '')
+        .replace(/^reddit\.com\/(u|user)\//i, '')
+        .replace(/^u\//i, '')
+        .replace(/\//g, '')
+        .trim();
 
-      content.includes('reddit.com/u/') ||
-
-      content.includes('reddit.com/user/') ||
-
-      content.startsWith('u/') ||
-
-      content.length > 2
-
-    );
+    return normalized.length >= 3;
   });
 
           // NO RESPONSE
@@ -871,7 +882,9 @@ if (!redditMessage) {
   const content =
     redditMessage.content;
   const cleanContent =
-  content.replace('www.', '');
+  content
+    .replace('www.', '')
+    .toLowerCase();
 
 let username = null;
 
@@ -911,6 +924,15 @@ if (!username) {
     '❌ Invalid Reddit username.'
   );
 }
+username =
+  username
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .replace(/^reddit\.com\/(u|user)\//i, '')
+    .replace(/^u\//i, '')
+    .replace(/\//g, '')
+    .trim()
+    .toLowerCase();
   const response =
     await axios.get(
 
@@ -1098,7 +1120,9 @@ components: [buttons]
 
     const content = message.content;
     const cleanContent =
-  content.replace('www.', '');
+  content
+    .replace('www.', '')
+    .toLowerCase();
 
 await message.channel.send(
   '🔍 Verifying Reddit account...'
@@ -1141,6 +1165,16 @@ if (!username) {
     '❌ Invalid Reddit username.'
   );
 }
+
+username =
+  username
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .replace(/^reddit\.com\/(u|user)\//i, '')
+    .replace(/^u\//i, '')
+    .replace(/\//g, '')
+    .trim()
+    .toLowerCase();
 
 if (!username.trim()) {
   return;
