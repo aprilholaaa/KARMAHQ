@@ -151,6 +151,43 @@ for (let i = 1; i < rows.length; i++) {
     targetUserId
   );
 
+  const taskCategoryIds = [
+
+'1481311691563073773',
+'1484190792955461674',
+'1484191986067181568',
+'1490048135542865950',
+'1490048221832282112',
+'1490048289918161166'
+
+];
+
+let selectedCategory = null;
+
+for (const categoryId of taskCategoryIds) {
+
+  const channels =
+    interaction.guild.channels.cache.filter(
+      c =>
+        c.parentId === categoryId &&
+        c.type === ChannelType.GuildText
+    );
+
+  if (channels.size < 50) {
+
+    selectedCategory = categoryId;
+    break;
+  }
+}
+
+if (!selectedCategory) {
+
+  return interaction.editReply(
+
+'❌ All task distribution categories are full.'
+
+  );
+}
   const taskChannel =
   await interaction.guild.channels.create({
 
@@ -159,7 +196,7 @@ for (let i = 1; i < rows.length; i++) {
     type: ChannelType.GuildText,
 
     parent:
-      '1490048289918161166',
+      selectedCategory,
 
     permissionOverwrites: [
 
@@ -798,26 +835,20 @@ if (!hasPermission) {
     });
 
   const redditMessage =
-    [...messages.values()].find(
-      msg =>
+  [...messages.values()].find(
+    msg =>
+      !msg.author.bot &&
+      msg.content.trim().length > 0
+  );
 
-        msg.content.includes(
-          'reddit.com/u/'
-        ) ||
+if (!redditMessage) {
 
-        msg.content.includes(
-          'reddit.com/user/'
-        )
-    );
+  return message.channel.send(
 
-  if (!redditMessage) {
+    '❌ No Reddit username found.'
 
-    return message.channel.send(
-
-      '❌ No Reddit link found.'
-
-    );
-  }
+  );
+}
 
   await message.channel.send(
 
@@ -1025,37 +1056,45 @@ components: [buttons]
 
     const content = message.content;
 
-   // CHECK FOR REDDIT LINK
-if (
-  !content.includes('reddit.com/u/') &&
-  !content.includes('reddit.com/user/')
-) return;
-
 await message.channel.send(
   '🔍 Verifying Reddit account...'
 );
 
 let username = null;
 
-if (content.includes('/u/')) {
+if (
+  content.includes('reddit.com/u/')
+) {
 
   username = content
     .split('/u/')[1]
     ?.split('/')[0];
 
 } else if (
-  content.includes('/user/')
+  content.includes('reddit.com/user/')
 ) {
 
   username = content
     .split('/user/')[1]
     ?.split('/')[0];
+
+} else if (
+  content.toLowerCase().startsWith('u/')
+) {
+
+  username = content
+    .split('u/')[1]
+    ?.trim();
+
+} else {
+
+  username = content.trim();
 }
 
 if (!username) {
 
   return message.channel.send(
-    'Invalid Reddit profile link.'
+    '❌ Invalid Reddit username.'
   );
 }
 
