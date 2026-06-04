@@ -1103,10 +1103,20 @@ components: [buttons]
 
     const channelName =
       message.channel.name.toLowerCase();
+    const verificationCategoryIds = [
 
-    if (
-      !channelName.includes('get-verified')
-    ) return;
+'1425011923384012870',
+'1476052332327469197',
+'1497494840022274088',
+'1497502779986673835'
+
+];
+
+if (
+  !verificationCategoryIds.includes(
+    message.channel.parentId
+  )
+) return;
 
     const content = message.content;
     const cleanContent =
