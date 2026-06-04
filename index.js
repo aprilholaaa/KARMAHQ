@@ -478,12 +478,12 @@ This ticket will now be closed automatically.`
 // ALT PASS
 if (
   interaction.customId.startsWith(
-    'altpass_'
+    'altpass|'
   )
 ) {
 
   const parts =
-  interaction.customId.split('_');
+  interaction.customId.split('|');
 const discordId =
   parts[1];
 
@@ -569,12 +569,12 @@ ${username}`
 // ALT FAIL
 if (
   interaction.customId.startsWith(
-    'altfail_'
+    'altfail|'
   )
 ) {
 
   const parts =
-  interaction.customId.split('_');
+  interaction.customId.split('|');
 const discordId =
   parts[1];
 
@@ -1056,7 +1056,7 @@ if (totalKarma >= 1000) {
       new ButtonBuilder()
         .setCustomId(
 
-`altpass_${message.author.id}_${username}_${postKarma}_${commentKarma}_${totalKarma}_${karmaLevel}_${ageText}_${data.over_18 ? 'YES' : 'NO'}`
+`altpass|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
 )
         .setLabel('PASS')
@@ -1065,7 +1065,7 @@ if (totalKarma >= 1000) {
       new ButtonBuilder()
         .setCustomId(
 
-`altfail_${message.author.id}_${username}_${postKarma}_${commentKarma}_${totalKarma}_${karmaLevel}_${ageText}_${data.over_18 ? 'YES' : 'NO'}`
+`altfail|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
 )
         .setLabel('FAIL')
