@@ -54,7 +54,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
     await rest.put(
       Routes.applicationGuildCommands(
         process.env.CLIENT_ID,
-        '1479785889826734182'
+        '1422894734913048616'
       ),
       { body: commands }
     );
@@ -151,14 +151,14 @@ for (let i = 1; i < rows.length; i++) {
     targetUserId
   );
 
-  const taskCategoryIds = [
+const taskCategoryIds = [
 
-'1481311691563073773',
-'1484190792955461674',
-'1484191986067181568',
-'1490048135542865950',
-'1490048221832282112',
-'1490048289918161166'
+'1425380169438330964',
+'1443134710984478902',
+'1483780750028312606',
+'1443988963126804480',
+'1475901746210537522',
+'1497502698751266837'
 
 ];
 
@@ -223,70 +223,70 @@ if (!selectedCategory) {
 
 await taskChannel.send(
 
-`<@${member.id}> you are verified.
+`You are verified, you can start doing tasks.
 
-<#1487433724344926419> is your communication channel with <@&1480907840398033026> and <@&1480909177961582662>.
+${taskChannel} is your channel.
 
-Please read the following channels carefully to understand the workflow and rules:
+Read these channels thoroughly before starting:
 
-<#1484427029901348964>
+https://discord.com/channels/1422894734913048616/1425073685814972446
 
-<#1484426857754660885>
+https://discord.com/channels/1422894734913048616/1425059828111380543
 
-<#1484442338590986281>`
+https://discord.com/channels/1422894734913048616/1425069238292320279`
 
 );
 
-  // TASKER
+  // VERIFIED
 
 
 await member.roles.add(
-  '1480908809739305043'
+  '1425018721541423164'
 );
-  // >200
-  if (totalKarma >= 200) {
-
-    await member.roles.add(
-      '1504544473936560239'
-    );
-  }
-
-  // >500
-  if (totalKarma >= 500) {
-
-    await member.roles.add(
-      '1504544632732782613'
-    );
-  }
-
   // >1K
-  if (totalKarma >= 1000) {
+if (totalKarma >= 1000) {
 
-    await member.roles.add(
-      '1504544695370514552'
-    );
-  }
+  await member.roles.add(
+    '1454080543997165568'
+  );
+}
 
-  // >2K
-  if (totalKarma >= 2000) {
+// >2.5K
+if (totalKarma >= 2500) {
 
-    await member.roles.add(
-      '1504544785610833980'
-    );
-  }
+  await member.roles.add(
+    '1461449274259800065'
+  );
+}
 
-  // >5K
-  if (totalKarma >= 5000) {
+// >5K
+if (totalKarma >= 5000) {
 
-    await member.roles.add(
-      '1504544612726079669'
-    );
-  }
+  await member.roles.add(
+    '1456339035663630447'
+  );
+}
+
+// >10K
+if (totalKarma >= 10000) {
+
+  await member.roles.add(
+    '1426872093945102446'
+  );
+}
+
+// >20K
+if (totalKarma >= 20000) {
+
+  await member.roles.add(
+    '1426872193828126770'
+  );
+}
 try {
 
   await member.roles.remove(
-    '1480908434365747343'
-  );
+  '1422910997945126922'
+);
 
 } catch (error) {
 
@@ -1488,14 +1488,14 @@ client.on(
           );
 
         const hasNewRole =
-          refreshedMember.roles.cache.has(
-            '1480908434365747343'
-          );
+  refreshedMember.roles.cache.has(
+    '1422910997945126922'
+  );
 
-        const hasTasker =
-          refreshedMember.roles.cache.has(
-            '1480908809739305043'
-          );
+const hasTasker =
+  refreshedMember.roles.cache.has(
+    '1425018721541423164'
+  );
 
         if (
           hasNewRole &&
