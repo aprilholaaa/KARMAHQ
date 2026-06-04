@@ -81,7 +81,7 @@ client.on('interactionCreate', async interaction => {
 
   if (interaction.commandName === 'ping') {
 
-    return interaction.reply('KARMAHQ ACTIVE');
+    return interaction.reply('verification bot ACTIVE');
   }
 
 });
@@ -752,7 +752,7 @@ if (firstMember) {
       // SEND INSTRUCTIONS
       await channel.send(
 
-`📌 KARMAHQ VERIFICATION
+`📌  VERIFICATION IN PROGRESS......
 
 Please send your Reddit profile link within 48 hours.
 
@@ -979,6 +979,8 @@ username =
     .replace(/\//g, '')
     .trim()
     .toLowerCase();
+    username =
+  username.split('?')[0];
   const response =
     await axios.get(
 
@@ -1227,6 +1229,8 @@ username =
     .replace(/\//g, '')
     .trim()
     .toLowerCase();
+    username =
+  username.split('?')[0];
 
 if (!username.trim()) {
   return;
@@ -1474,7 +1478,7 @@ console.log(
 await message.channel.send({
 
   content:
-`KARMAHQ REPORT
+`verification bot REPORT
 
 Username: ${username}
 
