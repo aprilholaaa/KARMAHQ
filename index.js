@@ -1057,17 +1057,22 @@ if (redditExists) {
     );
   }
 
-  const totalKarma =
-
-exactUser.total_karma ||
-exactUser.karma?.total ||
-0;
-const postKarma =
-  exactUser.link_karma || 0;
+  const postKarma =
+  Number(
+    exactUser.link_karma ||
+    exactUser.post_karma ||
+    0
+  );
 
 const commentKarma =
-  exactUser.comment_karma || 0;
+  Number(
+    exactUser.comment_karma ||
+    exactUser.comments_karma ||
+    0
+  );
 
+const totalKarma =
+  postKarma + commentKarma;
 const data = {
   over_18:
     exactUser.over_18
@@ -1270,8 +1275,8 @@ const exactUser =
   response.data;
   
   console.log(
-  'API RESPONSE:',
-  JSON.stringify(exactUser, null, 2)
+  'API RESPONSE FULL:',
+  JSON.stringify(response.data, null, 2)
 );
 
 if (!exactUser) {
@@ -1285,17 +1290,22 @@ Moderator manual review required.`
   );
 }
 
-const totalKarma =
-
-exactUser.total_karma ||
-exactUser.karma?.total ||
-0;
-  const postKarma =
-  exactUser.link_karma || 0;
+const postKarma =
+  Number(
+    exactUser.link_karma ||
+    exactUser.post_karma ||
+    0
+  );
 
 const commentKarma =
-  exactUser.comment_karma || 0;
+  Number(
+    exactUser.comment_karma ||
+    exactUser.comments_karma ||
+    0
+  );
 
+const totalKarma =
+  postKarma + commentKarma;
 const data = {
   over_18:
     exactUser.over_18
