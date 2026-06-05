@@ -1000,10 +1000,24 @@ username =
         }
       }
     );
+const users =
+  response.data?.data ||
+  response.data ||
+  [];
+
 const exactUser =
-  response.data?.data?.[0] ||
-  response.data?.[0] ||
-  response.data;
+  users.find(user => {
+
+    const apiUsername =
+
+String(
+  user.name || ''
+)
+.trim()
+.toLowerCase();
+
+    return apiUsername === username;
+  });
   
 const existingRows =
   await sheets.spreadsheets.values.get({
@@ -1057,58 +1071,28 @@ if (redditExists) {
     );
   }
 
-  const postKarma =
-  Number(
+const postKarma = 0;
 
-    exactUser.link_karma ||
-    exactUser.post_karma ||
-    exactUser.postKarma ||
-    exactUser.karma?.post ||
-    0
-  );
-
-const commentKarma =
-  Number(
-
-    exactUser.comment_karma ||
-    exactUser.comments_karma ||
-    exactUser.commentKarma ||
-    exactUser.karma?.comment ||
-    0
-  );
+const commentKarma = 0;
 
 const totalKarma =
 
-  Number(
-    exactUser.total_karma ||
-    exactUser.karma ||
-    exactUser.karma_total ||
-    exactUser.totalKarma
-  )
+Number(
+  exactUser.karma?.total || 0
+);
 
-  ||
-
-  (postKarma + commentKarma);
 const data = {
   over_18:
-    exactUser.over_18
+    exactUser.profile?.isNsfw ||
+    false
 };
 
 const createdValue =
 
-exactUser.created_utc ||
-exactUser.profile?.createdAt ||
-0;
+exactUser.profile?.createdAt;
 
 const createdDate =
-
-new Date(
-
-createdValue > 9999999999
-? createdValue
-: createdValue * 1000
-
-);
+  new Date(createdValue);
 
 const now = new Date();
 
@@ -1295,10 +1279,24 @@ const response =
 
 );
 
+const users =
+  response.data?.data ||
+  response.data ||
+  [];
+
 const exactUser =
-  response.data?.data?.[0] ||
-  response.data?.[0] ||
-  response.data;
+  users.find(user => {
+
+    const apiUsername =
+
+String(
+  user.name || ''
+)
+.trim()
+.toLowerCase();
+
+    return apiUsername === username;
+  });
   
   console.log(
   'API RESPONSE FULL:',
@@ -1316,58 +1314,28 @@ Moderator manual review required.`
   );
 }
 
-const postKarma =
-  Number(
+const postKarma = 0;
 
-    exactUser.link_karma ||
-    exactUser.post_karma ||
-    exactUser.postKarma ||
-    exactUser.karma?.post ||
-    0
-  );
-
-const commentKarma =
-  Number(
-
-    exactUser.comment_karma ||
-    exactUser.comments_karma ||
-    exactUser.commentKarma ||
-    exactUser.karma?.comment ||
-    0
-  );
+const commentKarma = 0;
 
 const totalKarma =
 
-  Number(
-    exactUser.total_karma ||
-    exactUser.karma ||
-    exactUser.karma_total ||
-    exactUser.totalKarma
-  )
+Number(
+  exactUser.karma?.total || 0
+);
 
-  ||
-
-  (postKarma + commentKarma);
 const data = {
   over_18:
-    exactUser.over_18
+    exactUser.profile?.isNsfw ||
+    false
 };
 
 const createdValue =
 
-exactUser.created_utc ||
-exactUser.profile?.createdAt ||
-0;
+exactUser.profile?.createdAt;
 
 const createdDate =
-
-new Date(
-
-createdValue > 9999999999
-? createdValue
-: createdValue * 1000
-
-);
+  new Date(createdValue);
 
 const now = new Date();
 
