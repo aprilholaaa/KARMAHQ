@@ -1021,8 +1021,12 @@ String(
 .trim()
 .toLowerCase();
 
-    return apiUsername === username;
-  });
+    return (
+  apiUsername ===
+  String(username)
+    .trim()
+    .toLowerCase()
+);
   
 const existingRows =
   await sheets.spreadsheets.values.get({
@@ -1305,8 +1309,12 @@ String(
 .trim()
 .toLowerCase();
 
-    return apiUsername === username;
-  });
+    return (
+  apiUsername ===
+  String(username)
+    .trim()
+    .toLowerCase()
+);
   
   console.log(
   'API RESPONSE FULL:',
