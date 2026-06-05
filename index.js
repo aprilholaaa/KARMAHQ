@@ -213,27 +213,122 @@ if (!selectedCategory) {
     parent:
       selectedCategory,
 
-    permissionOverwrites: [
+permissionOverwrites: [
 
-      {
-        id:
-          interaction.guild.id,
+  {
+    id: interaction.guild.id,
+    deny: ['ViewChannel']
+  },
 
-        deny:
-          ['ViewChannel']
-      },
+  {
+    id: member.id,
 
-      {
-        id:
-          member.id,
-
-        allow: [
-          'ViewChannel',
-          'SendMessages',
-          'ReadMessageHistory'
-        ]
-      }
+    allow: [
+      'ViewChannel',
+      'SendMessages',
+      'EmbedLinks',
+      'AttachFiles',
+      'AddReactions',
+      'UseExternalEmojis',
+      'UseExternalStickers',
+      'ReadMessageHistory',
+      'UseApplicationCommands'
     ]
+  },
+
+  {
+    id: '1422909022691922024',
+
+    allow: [
+      'ViewChannel',
+      'SendMessages',
+      'EmbedLinks',
+      'AttachFiles',
+      'AddReactions',
+      'UseExternalEmojis',
+      'UseExternalStickers',
+      'MentionEveryone',
+      'PinMessages',
+      'ManageMessages',
+      'ManageChannels',
+      'ReadMessageHistory',
+      'UseApplicationCommands'
+    ]
+  },
+
+  {
+    id: '1425011087157362718',
+
+allow: [
+  'ViewChannel',
+  'SendMessages',
+  'EmbedLinks',
+  'AttachFiles',
+  'AddReactions',
+  'UseExternalEmojis',
+  'UseExternalStickers',
+  'MentionEveryone',
+  'PinMessages',
+  'ManageMessages',
+  'ReadMessageHistory',
+  'UseApplicationCommands'
+]
+
+
+  },
+
+  {
+    id: '1482308432592900136',
+
+    allow: [
+  'ViewChannel',
+  'SendMessages',
+  'EmbedLinks',
+  'AttachFiles',
+  'AddReactions',
+  'UseExternalEmojis',
+  'UseExternalStickers',
+  'MentionEveryone',
+  'PinMessages',
+  'ManageMessages',
+  'ReadMessageHistory',
+  'UseApplicationCommands'
+]
+  },
+
+  {
+    id: '1425057547034820690',
+
+    allow: [
+  'ViewChannel',
+  'SendMessages',
+  'EmbedLinks',
+  'AttachFiles',
+  'AddReactions',
+  'UseExternalEmojis',
+  'UseExternalStickers',
+  'MentionEveryone',
+  'PinMessages',
+  'ManageMessages',
+  'ReadMessageHistory',
+  'UseApplicationCommands'
+]
+  },
+
+  {
+    id: client.user.id,
+
+    allow: [
+      'ViewChannel',
+      'SendMessages',
+      'ReadMessageHistory',
+      'ManageChannels',
+      'PinMessages',
+      'ManageMessages'
+    ]
+  }
+]
+
   });
 
 await taskChannel.send(
@@ -259,6 +354,9 @@ await member.roles.add(
   '1425018721541423164'
 );
 
+await member.roles.add(
+  '1486258386143281172'
+);
 
 if (is18Plus) {
 
