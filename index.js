@@ -1260,6 +1260,9 @@ client.on(
   'guildMemberAdd',
   
   async member => {
+console.log(
+  `MEMBER LEFT: ${member.user.tag}`
+);
 
     setTimeout(async () => {
 
@@ -1311,6 +1314,9 @@ client.on(
   client.on(
   'guildMemberRemove',
   async member => {
+console.log(
+  `MEMBER LEFT: ${member.user.tag}`
+);
 
     try {
 
@@ -1324,8 +1330,11 @@ client.on(
       for (const [, channel] of channels) {
 
         try {
+console.log(
+  `FOUND CHANNEL: ${channel.name}`
+);
 
-          await channel.delete();
+        await channel.delete();
 
           console.log(
             `DELETED CHANNEL: ${channel.name}`
