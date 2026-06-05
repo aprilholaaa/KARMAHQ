@@ -1227,22 +1227,29 @@ if (!username.trim()) {
 }
 const response =
   await axios.get(
-    
 
-`https://api.reddit.com/user/${username}/about`,
+'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
 
 {
-headers: {
-  'User-Agent':
-    'Mozilla/5.0'
-},
+  params: {
+    query: username
+  },
+
+  headers: {
+    'x-rapidapi-key':
+      process.env.RAPIDAPI_KEY,
+
+    'x-rapidapi-host':
+      'real-time-reddit-scraper1.p.rapidapi.com'
+  },
+
   timeout: 10000
 }
 
 );
 
 const exactUser =
-  response.data.data;
+  response.data.data?.[0];
   
   console.log(
   'API RESPONSE:',
