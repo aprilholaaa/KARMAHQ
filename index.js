@@ -17,12 +17,15 @@ const cheerio = require('cheerio');
 const { google } = require('googleapis');
 
 const client = new Client({
+
   intents: [
+
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent
-  ]
-});
+   ]
+  });
 
 const auth = new google.auth.GoogleAuth({
   
@@ -1324,7 +1327,8 @@ console.log(
         member.guild.channels.cache.filter(
           c =>
             c.type === ChannelType.GuildText &&
-            c.topic === member.id
+            c.topic &&
+            c.topic.trim() === member.id
         );
 
       for (const [, channel] of channels) {
