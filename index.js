@@ -1316,7 +1316,10 @@ console.log(
 
   client.on(
   'guildMemberRemove',
-  async member => {
+
+   async member => {
+    console.log('GUILD MEMBER REMOVE EVENT FIRED');
+
 console.log(
   `MEMBER LEFT: ${member.user.tag}`
 );
