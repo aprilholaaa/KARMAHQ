@@ -925,13 +925,13 @@ if (!redditMessage) {
 
   );
 
-  const content =
-    redditMessage.content;
-  const cleanContent =
-  content
+  const liveContent =
+  message.content;
+
+cleanContent =
+  liveContent
     .replace('www.', '')
     .toLowerCase();
-
 let username = null;
 
 if (
@@ -1027,6 +1027,7 @@ String(
     .trim()
     .toLowerCase()
 );
+});
   
 const existingRows =
   await sheets.spreadsheets.values.get({
@@ -1158,12 +1159,11 @@ if (totalKarma >= 1000) {
         .setLabel('FAIL')
         .setStyle(ButtonStyle.Danger)
     );
-
 await message.channel.send({
 
 content:
 
-`KARMAHQ ALT CHECK
+`verification bot ALT CHECK
 
 Username: ${username}
 
@@ -1180,407 +1180,15 @@ NSFW: ${data.over_18 ? 'YES' : 'NO'}
 Status: ALT
 
 Moderator review required.`,
-
 components: [buttons]
 
 });
 
-  return;
+return;
 
-    const verificationCategoryIds = [
-
-'1425011923384012870',
-'1476052332327469197',
-'1497494840022274088',
-'1497502779986673835'
-
-];
-
-if (
-  !verificationCategoryIds.includes(
-    message.channel.parentId
-  )
-) return;
-
-    const content = message.content;
-    const cleanContent =
-  content
-    .replace('www.', '')
-    .toLowerCase();
-
-await message.channel.send(
-  '🔍 Verifying Reddit account...'
-);
-
-let username = null;
-
-if (
-  cleanContent.includes('reddit.com/u/')
-) {
-
-  username = cleanContent
-    .split('/u/')[1]
-    ?.split('/')[0];
-
-} else if (
-  cleanContent.includes('reddit.com/user/')
-) {
-
-  username = cleanContent
-    .split('/user/')[1]
-    ?.split('/')[0];
-
-} else if (
-  content.toLowerCase().startsWith('u/')
-) {
-
-  username = cleanContent
-    .split('u/')[1]
-    ?.trim();
-
-} else {
-
-  username = cleanContent.trim();
 }
 
-if (!username) {
-
-  return message.channel.send(
-    '❌ Invalid Reddit username.'
-  );
-}
-
-username =
-  username
-    .replace(/^https?:\/\//i, '')
-    .replace(/^www\./i, '')
-    .replace(/^reddit\.com\/(u|user)\//i, '')
-    .replace(/^u\//i, '')
-    .replace(/\//g, '')
-    .trim()
-    .toLowerCase();
-    username =
-  username.split('?')[0];
-
-if (!username.trim()) {
-  return;
-}
-const response =
-  await axios.get(
-
-'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
-
-{
-  params: {
-    query: username
-  },
-
-  headers: {
-    'x-rapidapi-key':
-      process.env.RAPIDAPI_KEY,
-
-    'x-rapidapi-host':
-      'real-time-reddit-scraper1.p.rapidapi.com'
-  },
-
-  timeout: 10000
-}
-
-);
-
-const users =
-
-Array.isArray(response.data?.data)
-  ? response.data.data
-
-  : Array.isArray(response.data)
-  ? response.data
-
-  : [];
-
-const exactUser =
-  users.find(user => {
-
-    const apiUsername =
-
-String(
-  user.name || ''
-)
-.trim()
-.toLowerCase();
-
-    return (
-  apiUsername ===
-  String(username)
-    .trim()
-    .toLowerCase()
-);
-  
-  console.log(
-  'API RESPONSE FULL:',
-  JSON.stringify(response.data, null, 2)
-);
-
-if (!exactUser) {
-
-  return message.channel.send(
-
-`⚠️ Automatic Reddit verification failed.
-
-Moderator manual review required.`
-
-  );
-}
-
-const postKarma = 0;
-
-const commentKarma = 0;
-
-const totalKarma =
-
-Number(
-  exactUser.karma?.total || 0
-);
-
-const data = {
-  over_18:
-    exactUser.profile?.isNsfw ||
-    false
-};
-
-const createdValue =
-
-exactUser.profile?.createdAt;
-
-const createdDate =
-  new Date(createdValue);
-
-const now = new Date();
-
-let diffYears = 0;
-
-if (
-  !isNaN(createdDate.getTime())
-) {
-
-  diffYears =
-    now.getFullYear() -
-    createdDate.getFullYear();
-}
-
-const ageText =
-
-createdValue
-? `${diffYears} years`
-: 'Unknown';
-
-let karmaLevel = 'LOW';
-
-if (totalKarma >= 1000) {
-
-  karmaLevel = 'VERY HIGH';
-
-} else if (totalKarma >= 500) {
-
-  karmaLevel = 'HIGH';
-
-} else if (totalKarma >= 200) {
-
-  karmaLevel = 'MEDIUM';
-}
-  
-let verificationResult =
-  'PENDING REVIEW';
-
-const existingRows =
-  await sheets.spreadsheets.values.get({
-
-    spreadsheetId: SPREADSHEET_ID,
-
-    range: 'verification bot!A:AZ'
-  });
-
-const rows =
-  existingRows.data.values || [];
-
-const cleanUsername =
-
-String(username || '')
-.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
-.replace(/\//g, '')
-.split('?')[0]
-.trim()
-.toLowerCase();
-
-const redditExists =
-  rows.some(row => {
-
-    const sheetUsername =
-
-String(row[5] || '')
-.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
-.replace(/\//g, '')
-.split('?')[0]
-.trim()
-.toLowerCase();
-
-    return sheetUsername === cleanUsername;
-  });
-
-if (redditExists) {
-
-  return message.channel.send(
-
-`❌ This Reddit account already exists in records.`
-
-  );
-}
-
-let existingRowIndex = -1;
-
-for (let i = 1; i < rows.length; i++) {
-
-  const row = rows[i];
-
-  // DISCORD ID COLUMN = D
-  if (
-  String(row[3]).trim() ===
-  String(message.author.id).trim()
-) {
-
-    existingRowIndex = i + 1;
-    break;
-  }
-}
-
-const rowData = [
-  '',
-  message.author.username,
-  message.member?.displayName || '',
-  message.author.id,
-  content,
-  username,
-  '',
-  '',
-  totalKarma,
-  karmaLevel,
-  ageText,
-  data.over_18 ? 'YES' : 'NO',
-  'LIVE',
-  verificationResult,
-  ''
-];
-
-  console.log('SHEET WRITE START');
-
-console.log(
-  'USERNAME:',
-  username
-);
-
-console.log(
-  'DISCORD:',
-  message.author.id
-);
-
-try {
-
-if (existingRowIndex === -1) {
-
-  await sheets.spreadsheets.values.append({
-
-    spreadsheetId: SPREADSHEET_ID,
-
-    range: 'verification bot!A:O',
-
-    valueInputOption: 'USER_ENTERED',
-
-    requestBody: {
-      values: [rowData]
-    }
-  });
-
-} else {
-
-  await sheets.spreadsheets.values.update({
-
-    spreadsheetId: SPREADSHEET_ID,
-
-    range: `verification bot!A${existingRowIndex}:O${existingRowIndex}`,
-
-    valueInputOption: 'USER_ENTERED',
-
-    requestBody: {
-      values: [rowData]
-    }
-  });
-}
-
-console.log(
-  'SHEET WRITE SUCCESS'
-);
-
-} catch (sheetError) {
-
-  console.log(
-    'SHEET WRITE FAILED'
-  );
-
-  console.error(sheetError);
-}
-    // PASS
-
-   const buttons =
-  new ActionRowBuilder()
-    .addComponents(
-
-      new ButtonBuilder()
-        .setCustomId(
-          `approve_${message.author.id}`
-        )
-        .setLabel('Approve')
-        .setStyle(ButtonStyle.Success),
-
-      new ButtonBuilder()
-        .setCustomId(
-          `reject_${message.author.id}`
-        )
-        .setLabel('Reject')
-        .setStyle(ButtonStyle.Danger)
-    );
-await message.channel.send({
-
-  content:
-`verification bot REPORT
-
-Username: ${username}
-
-Total Karma: ${totalKarma}
-
-Karma Level: ${karmaLevel}
-
-Account Age: ${ageText}
-
-18+: ${data.over_18 ? 'YES' : 'NO'}
-
-NSFW: ${data.over_18 ? 'YES' : 'NO'}
-
-Status: LIVE
-
-Verification: ${verificationResult}
-
-⏳ Verification Pending Review
-
-Your Reddit account statistics have been submitted successfully.
-
-Please wait while the moderation team reviews your account.`,
-
-
-  components: [buttons]
-
-});
-  } catch (error) {
-
+} catch (error) {
   console.error(
     'MESSAGE VERIFY ERROR'
   );
@@ -1601,6 +1209,7 @@ Please wait while the moderation team reviews your account.`,
   );
 
   await message.channel.send(
+  
 
 `⚠️ Reddit verification failed.
 
@@ -1608,9 +1217,10 @@ Reddit temporarily blocked automated verification requests.
 
 Please wait for moderator manual review.`
 
-);
+  );
 
 }
+
 });
 
 client.on(
@@ -1627,14 +1237,14 @@ client.on(
           );
 
         const hasNewRole =
-  refreshedMember.roles.cache.has(
-    '1422910997945126922'
-  );
+          refreshedMember.roles.cache.has(
+            '1422910997945126922'
+          );
 
-const hasTasker =
-  refreshedMember.roles.cache.has(
-    '1425018721541423164'
-  );
+        const hasTasker =
+          refreshedMember.roles.cache.has(
+            '1425018721541423164'
+          );
 
         if (
           hasNewRole &&
@@ -1660,9 +1270,12 @@ const hasTasker =
       }
 
     }, 48 * 60 * 60 * 1000 + 60000);
+
   }
 );
 
 client.login(process.env.DISCORD_TOKEN);
 
 // redeploy trigger
+
+
