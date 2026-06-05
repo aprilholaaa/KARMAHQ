@@ -26,7 +26,9 @@ const client = new Client({
 
 const auth = new google.auth.GoogleAuth({
   
-credentials: require('./credentials.json'),
+credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+
+
 
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
