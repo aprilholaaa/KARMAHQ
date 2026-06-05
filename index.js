@@ -212,7 +212,7 @@ if (!selectedCategory) {
 
     parent:
       selectedCategory,
-
+    topic: member.id,
 permissionOverwrites: [
 
   {
@@ -1308,7 +1308,7 @@ client.on(
   }
 );
 
-client.on(
+  client.on(
   'guildMemberRemove',
   async member => {
 
@@ -1318,8 +1318,7 @@ client.on(
         member.guild.channels.cache.filter(
           c =>
             c.type === ChannelType.GuildText &&
-            c.name.toLowerCase() ===
-            member.user.username.toLowerCase()
+            c.topic === member.id
         );
 
       for (const [, channel] of channels) {
@@ -1352,7 +1351,6 @@ client.on(
     }
   }
 );
-
 
 client.login(process.env.DISCORD_TOKEN);
 
