@@ -984,7 +984,7 @@ username =
   const response =
     await axios.get(
 
-      'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
+      'https://reddit-com.p.rapidapi.com/people_search',
 
       {
         params: {
@@ -996,7 +996,7 @@ username =
             process.env.RAPIDAPI_KEY,
 
           'x-rapidapi-host':
-            'real-time-reddit-scraper1.p.rapidapi.com'
+         'reddit-com.p.rapidapi.com'
         }
       }
     );
