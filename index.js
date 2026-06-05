@@ -1000,9 +1000,9 @@ username =
         }
       }
     );
-
-  const users =
-    response.data.data || [];
+const exactUser =
+  response.data.data?.[0];
+  
 const existingRows =
   await sheets.spreadsheets.values.get({
 
@@ -1045,17 +1045,6 @@ if (redditExists) {
 
   );
 }
-  const exactUser =
-  users.find(
-    u =>
-
-      u.name
-        ?.toLowerCase()
-        ?.trim() ===
-      username
-        ?.toLowerCase()
-        ?.trim()
-  ) || users[0];
 
   if (!exactUser) {
 
@@ -1067,21 +1056,21 @@ if (redditExists) {
   }
 
   const totalKarma =
-    exactUser.karma?.total || 0;
+    exactUser.total_karma || 0;
 const postKarma =
-  exactUser.karma?.post || 0;
+  exactUser.link_karma || 0;
 
 const commentKarma =
-  exactUser.karma?.comments || 0;
+  exactUser.comment_karma || 0;
 
 const data = {
   over_18:
-    exactUser.profile.isNsfw
+    exactUser.over_18
 };
 
 const createdDate =
   new Date(
-    exactUser.profile.createdAt
+    exactUser.created_utc * 1000
   );
 
 const now = new Date();
@@ -1238,67 +1227,56 @@ if (!username.trim()) {
 }
 const response =
   await axios.get(
+    
 
-    'https://real-time-reddit-scraper1.p.rapidapi.com/people_search',
+`https://www.reddit.com/user/${username}/about.json`,
 
-    {
-      params: {
-        query: username
-      },
+{
+  headers: {
+    'User-Agent':
+      'verification-bot'
+  },
 
-      headers: {
-        'x-rapidapi-key':
-          process.env.RAPIDAPI_KEY,
+  timeout: 10000
+}
 
-        'x-rapidapi-host':
-          'real-time-reddit-scraper1.p.rapidapi.com'
-      },
-
-      timeout: 10000
-    }
-  );
-const users =
-  response.data.data || [];
-  console.log(
-  'API RESPONSE:',
-  JSON.stringify(users, null, 2)
 );
 
 const exactUser =
-  users.find(
-    u =>
-
-      u.name
-        ?.toLowerCase()
-        ?.trim() ===
-      username
-        ?.toLowerCase()
-        ?.trim()
-  ) || users[0];
+  response.data.data;
+  
+  console.log(
+  'API RESPONSE:',
+  JSON.stringify(exactUser, null, 2)
+);
 
 if (!exactUser) {
 
   return message.channel.send(
-    '❌ Reddit user not found.'
+
+`⚠️ Automatic Reddit verification failed.
+
+Moderator manual review required.`
+
   );
 }
 
 const totalKarma =
-  exactUser.karma?.total || 0;
+  exactUser.total_karma || 0;
   const postKarma =
-  exactUser.karma?.post || 0;
+  exactUser.link_karma || 0;
 
 const commentKarma =
-  exactUser.karma?.comments || 0;
+  exactUser.comment_karma || 0;
 
 const data = {
   over_18:
-    exactUser.profile.isNsfw
+    exactUser.over_18
 };
 
 const createdDate =
   new Date(
-    exactUser.profile.createdAt
+    exactUser.created_utc * 1000
   );
 
 const now = new Date();
