@@ -1186,7 +1186,7 @@ components: [buttons]
 });
 
   return;
-}
+
     const verificationCategoryIds = [
 
 '1425011923384012870',
