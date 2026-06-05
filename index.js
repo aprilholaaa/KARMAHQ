@@ -1001,9 +1001,14 @@ username =
       }
     );
 const users =
-  response.data?.data ||
-  response.data ||
-  [];
+
+Array.isArray(response.data?.data)
+  ? response.data.data
+
+  : Array.isArray(response.data)
+  ? response.data
+
+  : [];
 
 const exactUser =
   users.find(user => {
@@ -1280,9 +1285,14 @@ const response =
 );
 
 const users =
-  response.data?.data ||
-  response.data ||
-  [];
+
+Array.isArray(response.data?.data)
+  ? response.data.data
+
+  : Array.isArray(response.data)
+  ? response.data
+
+  : [];
 
 const exactUser =
   users.find(user => {
