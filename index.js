@@ -1001,7 +1001,9 @@ username =
       }
     );
 const exactUser =
-  response.data.data?.[0];
+  response.data?.data?.[0] ||
+  response.data?.[0] ||
+  response.data;
   
 const existingRows =
   await sheets.spreadsheets.values.get({
@@ -1249,7 +1251,9 @@ const response =
 );
 
 const exactUser =
-  response.data.data?.[0];
+  response.data?.data?.[0] ||
+  response.data?.[0] ||
+  response.data;
   
   console.log(
   'API RESPONSE:',
