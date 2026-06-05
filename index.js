@@ -1193,6 +1193,12 @@ return;
     'MESSAGE VERIFY ERROR'
   );
 
+console.log(
+  'FULL ERROR:',
+  error.response?.data
+);
+
+
   console.log(
     'STATUS:',
     error.response?.status
