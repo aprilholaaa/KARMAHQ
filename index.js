@@ -1258,6 +1258,7 @@ Please wait for moderator manual review.`
 
 client.on(
   'guildMemberAdd',
+  
   async member => {
 
     setTimeout(async () => {
@@ -1306,6 +1307,52 @@ client.on(
 
   }
 );
+
+client.on(
+  'guildMemberRemove',
+  async member => {
+
+    try {
+
+      const channels =
+        member.guild.channels.cache.filter(
+          c =>
+            c.type === ChannelType.GuildText &&
+            c.name.toLowerCase() ===
+            member.user.username.toLowerCase()
+        );
+
+      for (const [, channel] of channels) {
+
+        try {
+
+          await channel.delete();
+
+          console.log(
+            `DELETED CHANNEL: ${channel.name}`
+          );
+
+        } catch (error) {
+
+          console.log(
+            'CHANNEL DELETE FAILED'
+          );
+
+          console.error(error);
+        }
+      }
+
+    } catch (error) {
+
+      console.log(
+        'MEMBER REMOVE ERROR'
+      );
+
+      console.error(error);
+    }
+  }
+);
+
 
 client.login(process.env.DISCORD_TOKEN);
 
