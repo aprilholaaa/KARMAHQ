@@ -1059,33 +1059,56 @@ if (redditExists) {
 
   const postKarma =
   Number(
+
     exactUser.link_karma ||
     exactUser.post_karma ||
+    exactUser.postKarma ||
+    exactUser.karma?.post ||
     0
   );
 
 const commentKarma =
   Number(
+
     exactUser.comment_karma ||
     exactUser.comments_karma ||
+    exactUser.commentKarma ||
+    exactUser.karma?.comment ||
     0
   );
 
 const totalKarma =
-  postKarma + commentKarma;
+
+  Number(
+    exactUser.total_karma ||
+    exactUser.karma ||
+    exactUser.karma_total ||
+    exactUser.totalKarma
+  )
+
+  ||
+
+  (postKarma + commentKarma);
 const data = {
   over_18:
     exactUser.over_18
 };
 
+const createdValue =
+
+exactUser.created_utc ||
+exactUser.profile?.createdAt ||
+0;
+
 const createdDate =
-  new Date(
-    (
-  exactUser.created_utc ||
-  exactUser.profile?.createdAt ||
-  0
-) * 1000
-  );
+
+new Date(
+
+createdValue > 9999999999
+? createdValue
+: createdValue * 1000
+
+);
 
 const now = new Date();
 
@@ -1101,7 +1124,10 @@ if (
 }
 
 const ageText =
-  `${diffYears} years`;
+
+createdValue
+? `${diffYears} years`
+: 'Unknown';
 
 let karmaLevel = 'LOW';
 
@@ -1292,33 +1318,56 @@ Moderator manual review required.`
 
 const postKarma =
   Number(
+
     exactUser.link_karma ||
     exactUser.post_karma ||
+    exactUser.postKarma ||
+    exactUser.karma?.post ||
     0
   );
 
 const commentKarma =
   Number(
+
     exactUser.comment_karma ||
     exactUser.comments_karma ||
+    exactUser.commentKarma ||
+    exactUser.karma?.comment ||
     0
   );
 
 const totalKarma =
-  postKarma + commentKarma;
+
+  Number(
+    exactUser.total_karma ||
+    exactUser.karma ||
+    exactUser.karma_total ||
+    exactUser.totalKarma
+  )
+
+  ||
+
+  (postKarma + commentKarma);
 const data = {
   over_18:
     exactUser.over_18
 };
 
+const createdValue =
+
+exactUser.created_utc ||
+exactUser.profile?.createdAt ||
+0;
+
 const createdDate =
-  new Date(
-    (
-  exactUser.created_utc ||
-  exactUser.profile?.createdAt ||
-  0
-) * 1000
-  );
+
+new Date(
+
+createdValue > 9999999999
+? createdValue
+: createdValue * 1000
+
+);
 
 const now = new Date();
 
@@ -1334,7 +1383,10 @@ if (
 }
 
 const ageText =
-  `${diffYears} years`;
+
+createdValue
+? `${diffYears} years`
+: 'Unknown';
 
 let karmaLevel = 'LOW';
 
