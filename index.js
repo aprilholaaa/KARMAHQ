@@ -1058,7 +1058,10 @@ if (redditExists) {
   }
 
   const totalKarma =
-    exactUser.total_karma || 0;
+
+exactUser.total_karma ||
+exactUser.karma?.total ||
+0;
 const postKarma =
   exactUser.link_karma || 0;
 
@@ -1072,14 +1075,25 @@ const data = {
 
 const createdDate =
   new Date(
-    exactUser.created_utc * 1000
+    (
+  exactUser.created_utc ||
+  exactUser.profile?.createdAt ||
+  0
+) * 1000
   );
 
 const now = new Date();
 
-const diffYears =
-  now.getFullYear() -
-  createdDate.getFullYear();
+let diffYears = 0;
+
+if (
+  !isNaN(createdDate.getTime())
+) {
+
+  diffYears =
+    now.getFullYear() -
+    createdDate.getFullYear();
+}
 
 const ageText =
   `${diffYears} years`;
@@ -1272,7 +1286,10 @@ Moderator manual review required.`
 }
 
 const totalKarma =
-  exactUser.total_karma || 0;
+
+exactUser.total_karma ||
+exactUser.karma?.total ||
+0;
   const postKarma =
   exactUser.link_karma || 0;
 
@@ -1286,14 +1303,25 @@ const data = {
 
 const createdDate =
   new Date(
-    exactUser.created_utc * 1000
+    (
+  exactUser.created_utc ||
+  exactUser.profile?.createdAt ||
+  0
+) * 1000
   );
 
 const now = new Date();
 
-const diffYears =
-  now.getFullYear() -
-  createdDate.getFullYear();
+let diffYears = 0;
+
+if (
+  !isNaN(createdDate.getTime())
+) {
+
+  diffYears =
+    now.getFullYear() -
+    createdDate.getFullYear();
+}
 
 const ageText =
   `${diffYears} years`;
