@@ -984,7 +984,7 @@ username =
   const response =
     await axios.get(
 
-      'https://reddit-com.p.rapidapi.com/people_search',
+      'https://reddit-com.p.rapidapi.com/search/people',
 
       {
         params: {
