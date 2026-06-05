@@ -926,7 +926,7 @@ if (!redditMessage) {
   );
 
   const liveContent =
-  message.content;
+  redditMessage.content;
 
 cleanContent =
   liveContent
