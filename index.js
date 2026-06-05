@@ -1074,35 +1074,31 @@ client.on('messageCreate', async message => {
 
       karmaLevel = 'MEDIUM';
     }
+   
+const buttons =
+  new ActionRowBuilder()
+    .addComponents(
 
-    const buttons =
-      new ActionRowBuilder()
-        .addComponents(
+      new ButtonBuilder()
+        .setCustomId(
+          `approve_${message.author.id}`
+        )
+        .setLabel('APPROVE')
+        .setStyle(ButtonStyle.Success),
 
-          new ButtonBuilder()
-            .setCustomId(
+      new ButtonBuilder()
+        .setCustomId(
+          `reject_${message.author.id}`
+        )
+        .setLabel('REJECT')
+        .setStyle(ButtonStyle.Danger)
+    );
 
-`altpass|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
+await message.channel.send({
 
-            )
-            .setLabel('PASS')
-            .setStyle(ButtonStyle.Success),
+  content:
 
-          new ButtonBuilder()
-            .setCustomId(
-
-`altfail|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
-
-            )
-            .setLabel('FAIL')
-            .setStyle(ButtonStyle.Danger)
-        );
-
-    await message.channel.send({
-
-      content:
-
-`verification bot ALT CHECK
+`📋 Reddit Verification Review
 
 Username: ${username}
 
@@ -1114,15 +1110,12 @@ Account Age: ${ageText}
 
 18+: ${data.over_18 ? 'YES' : 'NO'}
 
-NSFW: ${data.over_18 ? 'YES' : 'NO'}
-
-Status: ALT
-
 Moderator review required.`,
 
-      components: [buttons]
+  components: [buttons]
 
-    });
+});
+
 
   } catch (error) {
 
