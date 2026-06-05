@@ -25,7 +25,9 @@ const client = new Client({
 });
 
 const auth = new google.auth.GoogleAuth({
-  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+  
+credentials: require('./credentials.json'),
+
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
 
@@ -864,304 +866,239 @@ await channel.delete();
 });
 
 // REDDIT LINK AUTO VERIFY
+
 client.on('messageCreate', async message => {
 
   try {
 
     if (message.author.bot) return;
+
+    const verificationCategoryIds = [
+
+      '1425011923384012870',
+      '1476052332327469197',
+      '1497494840022274088',
+      '1497502779986673835'
+
+    ];
+
     if (
-  message.content.toLowerCase() ===
-  '!verify'
-) {
-  const hasPermission =
-  message.member.roles.cache.some(
-    role =>
-      [
-'supreme',
-'admin',
-'manager',
-'mod'
-].some(permissionRole =>
-  role.name
-    .toLowerCase()
-    .includes(permissionRole)
+      !verificationCategoryIds.includes(
+        message.channel.parentId
       )
-  );
+    ) return;
 
-if (!hasPermission) {
+    const content =
+      message.content.toLowerCase();
 
-  return message.channel.send(
+    if (
+      !content.includes('reddit.com/u/') &&
+      !content.includes('reddit.com/user/') &&
+      !content.startsWith('u/')
+    ) return;
 
-    '❌ You are not allowed to use !verify.'
+    await message.channel.send(
+      '🔍 Verifying Reddit account...'
+    );
 
-  );
-}
- await message.delete();
+    const liveContent =
+      message.content;
 
-  const messages =
-    await message.channel.messages.fetch({
-      limit: 10
-    });
+    const cleanContent =
+      liveContent
+        .replace('www.', '')
+        .toLowerCase();
 
-  const redditMessage =
-  [...messages.values()].find(
-    msg =>
-      !msg.author.bot &&
-      msg.content.trim().length > 0
-  );
+    let username = null;
 
-if (!redditMessage) {
+    if (
+      cleanContent.includes('reddit.com/u/')
+    ) {
 
-  return message.channel.send(
+      username = cleanContent
+        .split('/u/')[1]
+        ?.split('/')[0];
 
-    '❌ No Reddit username found.'
+    } else if (
+      cleanContent.includes('reddit.com/user/')
+    ) {
 
-  );
-}
+      username = cleanContent
+        .split('/user/')[1]
+        ?.split('/')[0];
 
-  await message.channel.send(
+    } else if (
+      cleanContent.startsWith('u/')
+    ) {
 
-    '🔍 Verifying Reddit account...'
+      username = cleanContent
+        .split('u/')[1]
+        ?.trim();
 
-  );
+    } else {
 
-  const liveContent =
-  redditMessage.content;
+      username =
+        cleanContent.trim();
+    }
 
-cleanContent =
-  liveContent
-    .replace('www.', '')
-    .toLowerCase();
-let username = null;
+    if (!username) {
 
-if (
-  cleanContent.includes('reddit.com/u/')
-) {
+      return message.channel.send(
+        '❌ Invalid Reddit username.'
+      );
+    }
 
-  username = cleanContent
-    .split('/u/')[1]
-    ?.split('/')[0];
-
-} else if (
-  cleanContent.includes('reddit.com/user/')
-) {
-
-  username = cleanContent
-    .split('/user/')[1]
-    ?.split('/')[0];
-
-} else if (
-  cleanContent.toLowerCase().startsWith('u/')
-) {
-
-  username = cleanContent
-    .split('u/')[1]
-    ?.trim();
-
-} else {
-
-  username =
-    cleanContent.trim();
-}
-
-if (!username) {
-
-  return message.channel.send(
-    '❌ Invalid Reddit username.'
-  );
-}
-username =
-  username
-    .replace(/^https?:\/\//i, '')
-    .replace(/^www\./i, '')
-    .replace(/^reddit\.com\/(u|user)\//i, '')
-    .replace(/^u\//i, '')
-    .replace(/\//g, '')
-    .trim()
-    .toLowerCase();
     username =
-  username.split('?')[0];
-  const response =
-    await axios.get(
+      username
+        .replace(/^https?:\/\//i, '')
+        .replace(/^www\./i, '')
+        .replace(/^reddit\.com\/(u|user)\//i, '')
+        .replace(/^u\//i, '')
+        .replace(/\//g, '')
+        .trim()
+        .toLowerCase();
 
-      'https://reddit-com.p.rapidapi.com/search/people',
+    username =
+      username.split('?')[0];
 
-      {
-        params: {
-          query: username
-        },
+    const response =
+      await axios.get(
 
-        headers: {
-          'x-rapidapi-key':
-            process.env.RAPIDAPI_KEY,
+        'https://reddit-com.p.rapidapi.com/search/people',
 
-          'x-rapidapi-host':
-         'reddit-com.p.rapidapi.com'
+        {
+          params: {
+            query: username
+          },
+
+          headers: {
+            'x-rapidapi-key':
+              process.env.RAPIDAPI_KEY,
+
+            'x-rapidapi-host':
+              'reddit-com.p.rapidapi.com'
+          }
         }
-      }
-    );
-const users =
+      );
 
-Array.isArray(response.data?.data)
-  ? response.data.data
+    const users =
 
-  : Array.isArray(response.data)
-  ? response.data
+      Array.isArray(response.data?.data)
+        ? response.data.data
 
-  : [];
+        : Array.isArray(response.data)
+        ? response.data
 
-const exactUser =
-  users.find(user => {
+        : [];
 
-    const apiUsername =
+    const exactUser =
+      users.find(user => {
 
-String(
-  user.name || ''
-)
-.trim()
-.toLowerCase();
+        const apiUsername =
 
-    return (
-  apiUsername ===
-  String(username)
-    .trim()
-    .toLowerCase()
-);
-});
-  
-const existingRows =
-  await sheets.spreadsheets.values.get({
+          String(
+            user.name || ''
+          )
+          .trim()
+          .toLowerCase();
 
-    spreadsheetId: SPREADSHEET_ID,
+        return (
+          apiUsername ===
+          String(username)
+            .trim()
+            .toLowerCase()
+        );
+      });
 
-    range: 'verification bot!A:AZ'
-  });
+    if (!exactUser) {
 
-const rows =
-  existingRows.data.values || [];
+      return message.channel.send(
+        '❌ Reddit user not found.'
+      );
+    }
 
-const cleanUsername =
+    const postKarma = 0;
 
-String(username || '')
-.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
-.replace(/\//g, '')
-.split('?')[0]
-.trim()
-.toLowerCase();
+    const commentKarma = 0;
 
-const redditExists =
-  rows.some(row => {
+    const totalKarma =
 
-    const sheetUsername =
+      Number(
+        exactUser.karma?.total || 0
+      );
 
-String(row[5] || '')
-.replace(/https?:\/\/(www\.)?reddit\.com\/(u|user)\//gi, '')
-.replace(/\//g, '')
-.split('?')[0]
-.trim()
-.toLowerCase();
+    const data = {
+      over_18:
+        exactUser.profile?.isNsfw ||
+        false
+    };
 
-    return sheetUsername === cleanUsername;
-  });
-if (redditExists) {
+    const createdValue =
+      exactUser.profile?.createdAt;
 
-  return message.channel.send(
+    const createdDate =
+      new Date(createdValue);
 
-`❌ This Reddit account already exists in records.`
+    const now = new Date();
 
-  );
-}
+    let diffYears = 0;
 
-  if (!exactUser) {
+    if (
+      !isNaN(createdDate.getTime())
+    ) {
 
-    return message.channel.send(
+      diffYears =
+        now.getFullYear() -
+        createdDate.getFullYear();
+    }
 
-      '❌ Reddit user not found.'
+    const ageText =
 
-    );
-  }
+      createdValue
+        ? `${diffYears} years`
+        : 'Unknown';
 
-const postKarma = 0;
+    let karmaLevel = 'LOW';
 
-const commentKarma = 0;
+    if (totalKarma >= 1000) {
 
-const totalKarma =
+      karmaLevel = 'VERY HIGH';
 
-Number(
-  exactUser.karma?.total || 0
-);
+    } else if (totalKarma >= 500) {
 
-const data = {
-  over_18:
-    exactUser.profile?.isNsfw ||
-    false
-};
+      karmaLevel = 'HIGH';
 
-const createdValue =
+    } else if (totalKarma >= 200) {
 
-exactUser.profile?.createdAt;
+      karmaLevel = 'MEDIUM';
+    }
 
-const createdDate =
-  new Date(createdValue);
+    const buttons =
+      new ActionRowBuilder()
+        .addComponents(
 
-const now = new Date();
-
-let diffYears = 0;
-
-if (
-  !isNaN(createdDate.getTime())
-) {
-
-  diffYears =
-    now.getFullYear() -
-    createdDate.getFullYear();
-}
-
-const ageText =
-
-createdValue
-? `${diffYears} years`
-: 'Unknown';
-
-let karmaLevel = 'LOW';
-
-if (totalKarma >= 1000) {
-
-  karmaLevel = 'VERY HIGH';
-
-} else if (totalKarma >= 500) {
-
-  karmaLevel = 'HIGH';
-
-} else if (totalKarma >= 200) {
-
-  karmaLevel = 'MEDIUM';
-}
-  const buttons =
-  new ActionRowBuilder()
-    .addComponents(
-
-      new ButtonBuilder()
-        .setCustomId(
+          new ButtonBuilder()
+            .setCustomId(
 
 `altpass|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
-)
-        .setLabel('PASS')
-        .setStyle(ButtonStyle.Success),
+            )
+            .setLabel('PASS')
+            .setStyle(ButtonStyle.Success),
 
-      new ButtonBuilder()
-        .setCustomId(
+          new ButtonBuilder()
+            .setCustomId(
 
 `altfail|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
-)
-        .setLabel('FAIL')
-        .setStyle(ButtonStyle.Danger)
-    );
-await message.channel.send({
+            )
+            .setLabel('FAIL')
+            .setStyle(ButtonStyle.Danger)
+        );
 
-content:
+    await message.channel.send({
+
+      content:
 
 `verification bot ALT CHECK
 
@@ -1180,42 +1117,38 @@ NSFW: ${data.over_18 ? 'YES' : 'NO'}
 Status: ALT
 
 Moderator review required.`,
-components: [buttons]
 
-});
+      components: [buttons]
 
-return;
+    });
 
-}
+  } catch (error) {
 
-} catch (error) {
-  console.error(
-    'MESSAGE VERIFY ERROR'
-  );
+    console.error(
+      'MESSAGE VERIFY ERROR'
+    );
 
-console.log(
-  'FULL ERROR:',
-  error.response?.data
-);
+    console.log(
+      'FULL ERROR:',
+      error.response?.data
+    );
 
+    console.log(
+      'STATUS:',
+      error.response?.status
+    );
 
-  console.log(
-    'STATUS:',
-    error.response?.status
-  );
+    console.log(
+      'DATA:',
+      error.response?.data
+    );
 
-  console.log(
-    'DATA:',
-    error.response?.data
-  );
+    console.log(
+      'MESSAGE:',
+      error.message
+    );
 
-  console.log(
-    'MESSAGE:',
-    error.message
-  );
-
-  await message.channel.send(
-  
+    await message.channel.send(
 
 `⚠️ Reddit verification failed.
 
@@ -1223,11 +1156,12 @@ Reddit temporarily blocked automated verification requests.
 
 Please wait for moderator manual review.`
 
-  );
+    );
 
-}
+  }
 
 });
+
 
 client.on(
   'guildMemberAdd',
