@@ -1229,14 +1229,13 @@ const response =
   await axios.get(
     
 
-`https://www.reddit.com/user/${username}/about.json`,
+`https://api.reddit.com/user/${username}/about`,
 
 {
-  headers: {
-    'User-Agent':
-      'verification-bot'
-  },
-
+headers: {
+  'User-Agent':
+    'Mozilla/5.0'
+},
   timeout: 10000
 }
 
