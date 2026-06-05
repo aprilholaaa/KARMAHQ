@@ -132,7 +132,7 @@ if (
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet1!A:AZ'
+    range: 'Sheet 1 verification bot!A:AZ'
   });
 
 const rows =
@@ -379,7 +379,7 @@ if (existingRowIndex !== -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet1!N${existingRowIndex}`,
+    range: `Sheet 1 verification bot!N${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
@@ -449,7 +449,7 @@ if (
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet1!A:AZ'
+    range: 'Sheet 1 verification bot!A:AZ'
   });
 
 const rows =
@@ -477,7 +477,7 @@ if (existingRowIndex !== -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet1!N${existingRowIndex}`,
+    range: `Sheet 1 verification bot!N${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
@@ -564,7 +564,7 @@ const over18 =
 
   spreadsheetId: SPREADSHEET_ID,
 
-  range: 'Sheet1!A:O',
+  range: 'Sheet 1 verification bot!A:O',
 
   valueInputOption: 'USER_ENTERED',
 
@@ -655,7 +655,7 @@ await sheets.spreadsheets.values.append({
 
   spreadsheetId: SPREADSHEET_ID,
 
-  range: 'Sheet1!A:O',
+  range: 'Sheet 1 verification bot!A:O',
 
   valueInputOption: 'USER_ENTERED',
 
@@ -1008,7 +1008,7 @@ const existingRows =
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet1!A:AZ'
+    range: 'Sheet 1 verification bot!A:AZ'
   });
 
 const rows =
@@ -1324,7 +1324,7 @@ const existingRows =
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet1!A:AZ'
+    range: 'Sheet 1 verification bot!A:AZ'
   });
 
 const rows =
@@ -1418,7 +1418,7 @@ if (existingRowIndex === -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet1!A:O',
+    range: 'Sheet 1 verification bot!A:O',
 
     valueInputOption: 'USER_ENTERED',
 
@@ -1433,7 +1433,7 @@ if (existingRowIndex === -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet1!A${existingRowIndex}:O${existingRowIndex}`,
+    range: `Sheet 1 verification bot!A${existingRowIndex}:O${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
