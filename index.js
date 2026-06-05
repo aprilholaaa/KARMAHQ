@@ -132,7 +132,7 @@ if (
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet 1 verification bot!A:AZ'
+    range: 'verification bot!A:AZ'
   });
 
 const rows =
@@ -379,7 +379,7 @@ if (existingRowIndex !== -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet 1 verification bot!N${existingRowIndex}`,
+    range: `verification bot!N${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
@@ -449,7 +449,7 @@ if (
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet 1 verification bot!A:AZ'
+    range: 'verification bot!A:AZ'
   });
 
 const rows =
@@ -477,7 +477,7 @@ if (existingRowIndex !== -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet 1 verification bot!N${existingRowIndex}`,
+    range: `verification bot!N${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
@@ -564,7 +564,7 @@ const over18 =
 
   spreadsheetId: SPREADSHEET_ID,
 
-  range: 'Sheet 1 verification bot!A:O',
+  range: 'verification bot!A:O',
 
   valueInputOption: 'USER_ENTERED',
 
@@ -655,7 +655,7 @@ await sheets.spreadsheets.values.append({
 
   spreadsheetId: SPREADSHEET_ID,
 
-  range: 'Sheet 1 verification bot!A:O',
+  range: 'verification bot!A:O',
 
   valueInputOption: 'USER_ENTERED',
 
@@ -1008,7 +1008,7 @@ const existingRows =
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet 1 verification bot!A:AZ'
+    range: 'verification bot!A:AZ'
   });
 
 const rows =
@@ -1046,12 +1046,16 @@ if (redditExists) {
   );
 }
   const exactUser =
-    users.find(
-      u =>
+  users.find(
+    u =>
 
-        u.name.toLowerCase() ===
-        username.toLowerCase()
-    );
+      u.name
+        ?.toLowerCase()
+        ?.trim() ===
+      username
+        ?.toLowerCase()
+        ?.trim()
+  ) || users[0];
 
   if (!exactUser) {
 
@@ -1154,9 +1158,6 @@ components: [buttons]
 
   return;
 }
-
-    const channelName =
-      message.channel.name.toLowerCase();
     const verificationCategoryIds = [
 
 '1425011923384012870',
@@ -1258,14 +1259,22 @@ const response =
   );
 const users =
   response.data.data || [];
+  console.log(
+  'API RESPONSE:',
+  JSON.stringify(users, null, 2)
+);
 
 const exactUser =
   users.find(
     u =>
-      
-u.name.toLowerCase() ===
-username.toLowerCase()
-  );
+
+      u.name
+        ?.toLowerCase()
+        ?.trim() ===
+      username
+        ?.toLowerCase()
+        ?.trim()
+  ) || users[0];
 
 if (!exactUser) {
 
@@ -1324,7 +1333,7 @@ const existingRows =
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet 1 verification bot!A:AZ'
+    range: 'verification bot!A:AZ'
   });
 
 const rows =
@@ -1418,7 +1427,7 @@ if (existingRowIndex === -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: 'Sheet 1 verification bot!A:O',
+    range: 'verification bot!A:O',
 
     valueInputOption: 'USER_ENTERED',
 
@@ -1433,7 +1442,7 @@ if (existingRowIndex === -1) {
 
     spreadsheetId: SPREADSHEET_ID,
 
-    range: `Sheet 1 verification bot!A${existingRowIndex}:O${existingRowIndex}`,
+    range: `verification bot!A${existingRowIndex}:O${existingRowIndex}`,
 
     valueInputOption: 'USER_ENTERED',
 
