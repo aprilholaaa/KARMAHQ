@@ -1195,6 +1195,34 @@ const buttons =
         .setStyle(ButtonStyle.Danger)
     );
 
+const existingMessages =
+  await message.channel.messages.fetch({
+    limit: 50
+  });
+
+const reviewAlreadyExists =
+  existingMessages.some(msg =>
+    msg.content?.includes(
+      '📋 Reddit Verification Review'
+    )
+  );
+
+if (reviewAlreadyExists) {
+
+  return message.channel.send(
+
+`⏳ Please be patient.
+
+Your Reddit account has already been submitted for review.
+
+Our moderation team will review your verification request and approve or reject it shortly.
+
+No further action is required from your side.`
+
+  );
+}
+
+
 await message.channel.send({
 
   content:
