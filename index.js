@@ -75,7 +75,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 })();
 
-client.on('ready', () => {
+client.on('clientReady', () => {
 
   console.log(`BOT READY: ${client.user.tag}`);
 
