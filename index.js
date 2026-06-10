@@ -17,21 +17,16 @@ const cheerio = require('cheerio');
 const { google } = require('googleapis');
 
 const client = new Client({
-
   intents: [
-
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent
-   ]
-  });
+  ]
+});
 
 const auth = new google.auth.GoogleAuth({
   
-credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
-
-
+credentials: require('./credentials.json'),
 
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
@@ -75,7 +70,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 })();
 
-client.on('clientReady', () => {
+client.on('ready', () => {
 
   console.log(`BOT READY: ${client.user.tag}`);
 
@@ -215,123 +210,28 @@ if (!selectedCategory) {
 
     parent:
       selectedCategory,
-    topic: member.id,
-permissionOverwrites: [
 
-  {
-    id: interaction.guild.id,
-    deny: ['ViewChannel']
-  },
+    permissionOverwrites: [
 
-  {
-    id: member.id,
+      {
+        id:
+          interaction.guild.id,
 
-    allow: [
-      'ViewChannel',
-      'SendMessages',
-      'EmbedLinks',
-      'AttachFiles',
-      'AddReactions',
-      'UseExternalEmojis',
-      'UseExternalStickers',
-      'ReadMessageHistory',
-      'UseApplicationCommands'
+        deny:
+          ['ViewChannel']
+      },
+
+      {
+        id:
+          member.id,
+
+        allow: [
+          'ViewChannel',
+          'SendMessages',
+          'ReadMessageHistory'
+        ]
+      }
     ]
-  },
-
-  {
-    id: '1422909022691922024',
-
-    allow: [
-      'ViewChannel',
-      'SendMessages',
-      'EmbedLinks',
-      'AttachFiles',
-      'AddReactions',
-      'UseExternalEmojis',
-      'UseExternalStickers',
-      'MentionEveryone',
-      'PinMessages',
-      'ManageMessages',
-      'ManageChannels',
-      'ReadMessageHistory',
-      'UseApplicationCommands'
-    ]
-  },
-
-  {
-    id: '1425011087157362718',
-
-allow: [
-  'ViewChannel',
-  'SendMessages',
-  'EmbedLinks',
-  'AttachFiles',
-  'AddReactions',
-  'UseExternalEmojis',
-  'UseExternalStickers',
-  'MentionEveryone',
-  'PinMessages',
-  'ManageMessages',
-  'ReadMessageHistory',
-  'UseApplicationCommands'
-]
-
-
-  },
-
-  {
-    id: '1482308432592900136',
-
-    allow: [
-  'ViewChannel',
-  'SendMessages',
-  'EmbedLinks',
-  'AttachFiles',
-  'AddReactions',
-  'UseExternalEmojis',
-  'UseExternalStickers',
-  'MentionEveryone',
-  'PinMessages',
-  'ManageMessages',
-  'ReadMessageHistory',
-  'UseApplicationCommands'
-]
-  },
-
-  {
-    id: '1425057547034820690',
-
-    allow: [
-  'ViewChannel',
-  'SendMessages',
-  'EmbedLinks',
-  'AttachFiles',
-  'AddReactions',
-  'UseExternalEmojis',
-  'UseExternalStickers',
-  'MentionEveryone',
-  'PinMessages',
-  'ManageMessages',
-  'ReadMessageHistory',
-  'UseApplicationCommands'
-]
-  },
-
-  {
-    id: client.user.id,
-
-    allow: [
-      'ViewChannel',
-      'SendMessages',
-      'ReadMessageHistory',
-      'ManageChannels',
-      'PinMessages',
-      'ManageMessages'
-    ]
-  }
-]
-
   });
 
 await taskChannel.send(
@@ -357,9 +257,6 @@ await member.roles.add(
   '1425018721541423164'
 );
 
-await member.roles.add(
-  '1486258386143281172'
-);
 
 if (is18Plus) {
 
@@ -1064,44 +961,95 @@ client.on('messageCreate', async message => {
     username =
       username.split('?')[0];
 
-    
-     const response = await axios.get(
-  `https://www.reddit.com/user/${username}/about.json`,
-  {
-    headers: {
-      'User-Agent': 'Mozilla/5.0'
-    }
-  }
+    const response =
+      await axios.get(
+
+        'https://reddit-com.p.rapidapi.com/search-people',
+
+        {
+          params: {
+            query: username
+          },
+
+          headers: {
+            'x-rapidapi-key':
+              process.env.RAPIDAPI_KEY,
+
+            'x-rapidapi-host':
+              'reddit-com.p.rapidapi.com'
+          }
+        }
+      );
+
+    const users =
+
+      Array.isArray(response.data?.data)
+        ? response.data.data
+
+        : Array.isArray(response.data)
+        ? response.data
+
+        : [];
+        console.log('USERNAME:', username);
+
+console.log(
+  'USERS FOUND:',
+  users.map(u => u.name)
 );
 
-const exactUser = response.data.data;
+console.log(
+  'RAW RESPONSE:',
+  JSON.stringify(response.data)
+);
 
-if (!exactUser) {
+    const exactUser =
+      users.find(user => {
 
-  return message.channel.send(
-    '❌ Reddit user not found.'
-  );
-}
+        const apiUsername =
+
+          String(
+            user.name || ''
+          )
+          .trim()
+          .toLowerCase();
+
+        return (
+          apiUsername ===
+          String(username)
+            .trim()
+            .toLowerCase()
+        );
+      });
+
+    if (!exactUser) {
+
+      return message.channel.send(
+        '❌ Reddit user not found.'
+      );
+    }
+
     const postKarma = 0;
 
     const commentKarma = 0;
 
     const totalKarma =
-  Number(
-    exactUser.total_karma || 0
-  );
+
+      Number(
+        exactUser.karma?.total || 0
+      );
 
     const data = {
-  over_18:
-    exactUser.over_18 || false
-};
+      over_18:
+        exactUser.profile?.isNsfw ||
+        false
+    };
 
     const createdValue =
-  new Date(
-    exactUser.created_utc * 1000
-  );
+      exactUser.profile?.createdAt;
+
     const createdDate =
-  createdValue;
+      new Date(createdValue);
+
     const now = new Date();
 
     let diffYears = 0;
@@ -1135,59 +1083,35 @@ if (!exactUser) {
 
       karmaLevel = 'MEDIUM';
     }
-   
-const buttons =
-  new ActionRowBuilder()
-    .addComponents(
 
-      new ButtonBuilder()
-        .setCustomId(
-          `approve_${message.author.id}`
-        )
-        .setLabel('APPROVE')
-        .setStyle(ButtonStyle.Success),
+    const buttons =
+      new ActionRowBuilder()
+        .addComponents(
 
-      new ButtonBuilder()
-        .setCustomId(
-          `reject_${message.author.id}`
-        )
-        .setLabel('REJECT')
-        .setStyle(ButtonStyle.Danger)
-    );
+          new ButtonBuilder()
+            .setCustomId(
 
-const existingMessages =
-  await message.channel.messages.fetch({
-    limit: 50
-  });
+`altpass|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
-const reviewAlreadyExists =
-  existingMessages.some(msg =>
-    msg.content?.includes(
-      '📋 Reddit Verification Review'
-    )
-  );
+            )
+            .setLabel('PASS')
+            .setStyle(ButtonStyle.Success),
 
-if (reviewAlreadyExists) {
+          new ButtonBuilder()
+            .setCustomId(
 
-  return message.channel.send(
+`altfail|${message.author.id}|${username}|${postKarma}|${commentKarma}|${totalKarma}|${karmaLevel}|${ageText}|${data.over_18 ? 'YES' : 'NO'}`
 
-`⏳ Please be patient.
+            )
+            .setLabel('FAIL')
+            .setStyle(ButtonStyle.Danger)
+        );
 
-Your Reddit account has already been submitted for review.
+    await message.channel.send({
 
-Our moderation team will review your verification request and approve or reject it shortly.
+      content:
 
-No further action is required from your side.`
-
-  );
-}
-
-
-await message.channel.send({
-
-  content:
-
-`📋 Reddit Verification Review
+`verification bot ALT CHECK
 
 Username: ${username}
 
@@ -1199,12 +1123,15 @@ Account Age: ${ageText}
 
 18+: ${data.over_18 ? 'YES' : 'NO'}
 
+NSFW: ${data.over_18 ? 'YES' : 'NO'}
+
+Status: ALT
+
 Moderator review required.`,
 
-  components: [buttons]
+      components: [buttons]
 
-});
-
+    });
 
   } catch (error) {
 
@@ -1249,11 +1176,7 @@ Please wait for moderator manual review.`
 
 client.on(
   'guildMemberAdd',
-  
   async member => {
-console.log(
-  `MEMBER LEFT: ${member.user.tag}`
-);
 
     setTimeout(async () => {
 
@@ -1299,60 +1222,6 @@ console.log(
 
     }, 48 * 60 * 60 * 1000 + 60000);
 
-  }
-);
-
-  client.on(
-  'guildMemberRemove',
-
-   async member => {
-    console.log('GUILD MEMBER REMOVE EVENT FIRED');
-
-console.log(
-  `MEMBER LEFT: ${member.user.tag}`
-);
-
-    try {
-
-      const channels =
-        member.guild.channels.cache.filter(
-          c =>
-            c.type === ChannelType.GuildText &&
-            c.topic &&
-            c.topic.trim() === member.id
-        );
-
-      for (const [, channel] of channels) {
-
-        try {
-console.log(
-  `FOUND CHANNEL: ${channel.name}`
-);
-
-        await channel.delete();
-
-          console.log(
-            `DELETED CHANNEL: ${channel.name}`
-          );
-
-        } catch (error) {
-
-          console.log(
-            'CHANNEL DELETE FAILED'
-          );
-
-          console.error(error);
-        }
-      }
-
-    } catch (error) {
-
-      console.log(
-        'MEMBER REMOVE ERROR'
-      );
-
-      console.error(error);
-    }
   }
 );
 
