@@ -486,7 +486,7 @@ if (existingRowIndex !== -1) {
     valueInputOption: 'USER_ENTERED',
 
     requestBody: {
-      
+
       values: [['REJECTED']]
     }
   });
@@ -987,11 +987,6 @@ client.on('messageCreate', async message => {
           }
         }
       );
-      
-     console.log(
-  'FULL RAPID RESPONSE:',
-  JSON.stringify(response.data, null, 2)
-);
 
     const users =
 
@@ -1003,9 +998,10 @@ client.on('messageCreate', async message => {
 
         : [];
      console.log('USERNAME:', username);
+
 console.log(
-  'USERS:',
-  JSON.stringify(users, null, 2)
+  'TOTAL RESULTS:',
+  users.length
 );
 console.log(
   users.map(u => ({
