@@ -26,7 +26,7 @@ const client = new Client({
 
 const auth = new google.auth.GoogleAuth({
   
-credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS),
+credentials: require('./credentials.json'),
 
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
@@ -963,8 +963,9 @@ client.on('messageCreate', async message => {
 
     const response =
       await axios.get(
+        
 
-        'https://reddit-com.p.rapidapi.com/search-people',
+        'https://reddit-com.p.rapidapi.com/search/people',
 
         {
           params: {
@@ -980,6 +981,11 @@ client.on('messageCreate', async message => {
           }
         }
       );
+      
+     console.log(
+  'FULL RAPID RESPONSE:',
+  JSON.stringify(response.data, null, 2)
+);
 
     const users =
 
@@ -990,16 +996,10 @@ client.on('messageCreate', async message => {
         ? response.data
 
         : [];
-        console.log('USERNAME:', username);
-
+     console.log('USERNAME:', username);
 console.log(
-  'USERS FOUND:',
-  users.map(u => u.name)
-);
-
-console.log(
-  'RAW RESPONSE:',
-  JSON.stringify(response.data)
+  'USERS:',
+  JSON.stringify(users, null, 2)
 );
 
     const exactUser =
