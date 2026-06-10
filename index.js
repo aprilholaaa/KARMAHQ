@@ -333,6 +333,7 @@ try {
   );
 
   console.error(error);
+  
 }
   const disabledButtons =
     new ActionRowBuilder()
@@ -386,6 +387,7 @@ if (existingRowIndex !== -1) {
     valueInputOption: 'USER_ENTERED',
 
     requestBody: {
+
       values: [['APPROVED']]
     }
   });
@@ -484,6 +486,7 @@ if (existingRowIndex !== -1) {
     valueInputOption: 'USER_ENTERED',
 
     requestBody: {
+      
       values: [['REJECTED']]
     }
   });
@@ -569,9 +572,8 @@ const over18 =
   range: 'verification bot!A:O',
 
   valueInputOption: 'USER_ENTERED',
-
+  
   requestBody: {
-
     values: [[
       '',
       interaction.user.username,
@@ -653,6 +655,7 @@ const over18 =
   await interaction.message.edit({
     components: [disabledButtons]
   });
+  
 await sheets.spreadsheets.values.append({
 
   spreadsheetId: SPREADSHEET_ID,
@@ -701,7 +704,10 @@ ${username}`
   );
 
   console.error(error);
-
+console.error(
+    'STACK:',
+    error.stack
+  );
   try {
 
   await interaction.editReply(
@@ -1049,6 +1055,10 @@ console.log(
         false
     };
 
+    console.log(
+  'NSFW VALUE:',
+  exactUser.profile?.isNsfw
+);
     const createdValue =
       exactUser.profile?.createdAt;
 
