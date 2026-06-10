@@ -1064,89 +1064,44 @@ client.on('messageCreate', async message => {
     username =
       username.split('?')[0];
 
-    const response =
-      await axios.get(
-
-        'https://reddit-com.p.rapidapi.com/search-people',
-
-        {
-          params: {
-            query: username
-          },
-
-          headers: {
-            'x-rapidapi-key':
-              process.env.RAPIDAPI_KEY,
-
-            'x-rapidapi-host':
-              'reddit-com.p.rapidapi.com'
-          }
-        }
-      );
-
-    const users =
-
-      Array.isArray(response.data?.data)
-        ? response.data.data
-
-        : Array.isArray(response.data)
-        ? response.data
-
-        : [];
-       
-        console.log(
-  'USERS FOUND:',
-  users.map(u => u.name)
+    
+     const response = await axios.get(
+  `https://www.reddit.com/user/${username}/about.json`,
+  {
+    headers: {
+      'User-Agent': 'Mozilla/5.0'
+    }
+  }
 );
 
-    const exactUser =
-      users.find(user => {
+const exactUser = response.data.data;
 
-        const apiUsername =
+if (!exactUser) {
 
-          String(
-            user.name || ''
-          )
-          .trim()
-          .toLowerCase();
-
-        return (
-          apiUsername ===
-          String(username)
-            .trim()
-            .toLowerCase()
-        );
-      });
-
-    if (!exactUser) {
-
-      return message.channel.send(
-        '❌ Reddit user not found.'
-      );
-    }
-
+  return message.channel.send(
+    '❌ Reddit user not found.'
+  );
+}
     const postKarma = 0;
 
     const commentKarma = 0;
 
     const totalKarma =
-
-      Number(
-        exactUser.karma?.total || 0
-      );
+  Number(
+    exactUser.total_karma || 0
+  );
 
     const data = {
-      over_18:
-        exactUser.profile?.isNsfw ||
-        false
-    };
+  over_18:
+    exactUser.over_18 || false
+};
 
     const createdValue =
-      exactUser.profile?.createdAt;
-
+  new Date(
+    exactUser.created_utc * 1000
+  );
     const createdDate =
-      new Date(createdValue);
-
+  createdValue;
     const now = new Date();
 
     let diffYears = 0;
