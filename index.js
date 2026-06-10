@@ -1083,6 +1083,8 @@ client.on('messageCreate', async message => {
           }
         }
       );
+      console.log('USERNAME:', username);
+console.log('API RESPONSE:', JSON.stringify(response.data));
 
     const users =
 
