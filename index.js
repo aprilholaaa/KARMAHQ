@@ -1001,7 +1001,12 @@ console.log(
   'USERS:',
   JSON.stringify(users, null, 2)
 );
-
+console.log(
+  users.map(u => ({
+    name: u.name,
+    nsfw: u.profile?.isNsfw
+  }))
+);
     const exactUser =
       users.find(user => {
 
