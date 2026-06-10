@@ -1083,8 +1083,6 @@ client.on('messageCreate', async message => {
           }
         }
       );
-      console.log('USERNAME:', username);
-console.log('API RESPONSE:', JSON.stringify(response.data));
 
     const users =
 
@@ -1095,6 +1093,11 @@ console.log('API RESPONSE:', JSON.stringify(response.data));
         ? response.data
 
         : [];
+       
+        console.log(
+  'USERS FOUND:',
+  users.map(u => u.name)
+);
 
     const exactUser =
       users.find(user => {
