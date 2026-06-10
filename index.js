@@ -965,7 +965,7 @@ client.on('messageCreate', async message => {
       await axios.get(
         
 
-        'https://reddit-com.p.rapidapi.com/search/people',
+        'https://reddit-com.p.rapidapi.com/search-people',
 
         {
           params: {
