@@ -257,6 +257,9 @@ await member.roles.add(
   '1425018721541423164'
 );
 
+await member.roles.add(
+  '1486258386143281172'
+);
 
 if (is18Plus) {
 
