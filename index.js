@@ -213,25 +213,40 @@ if (!selectedCategory) {
 
     permissionOverwrites: [
 
-      {
-        id:
-          interaction.guild.id,
+  {
+    id: interaction.guild.id,
+    deny: ['ViewChannel']
+  },
 
-        deny:
-          ['ViewChannel']
-      },
-
-      {
-        id:
-          member.id,
-
-        allow: [
-          'ViewChannel',
-          'SendMessages',
-          'ReadMessageHistory'
-        ]
-      }
+  {
+    id: member.id,
+    allow: [
+      'ViewChannel',
+      'SendMessages',
+      'ReadMessageHistory'
     ]
+  },
+
+  {
+    id: '1422909022691922024', // SUPREME
+    allow: ['ViewChannel']
+  },
+
+  {
+    id: '1425011087157362718', // MANAGER
+    allow: ['ViewChannel']
+  },
+
+  {
+    id: '1482308432592900136', // ADMIN
+    allow: ['ViewChannel']
+  },
+
+  {
+    id: '1425057547034820690', // MOD
+    allow: ['ViewChannel']
+  }
+]
   });
 
 await taskChannel.send(
