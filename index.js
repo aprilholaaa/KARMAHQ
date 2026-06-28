@@ -780,7 +780,7 @@ if (firstMember) {
 
 `📌  VERIFICATION IN PROGRESS......
 
-Please send your Reddit profile link within 48 hours.
+Please send your Reddit profile link within 2 hours.
 
 Example:
 https://reddit.com/u/yourusername
